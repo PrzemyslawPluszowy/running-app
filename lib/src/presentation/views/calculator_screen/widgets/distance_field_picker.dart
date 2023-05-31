@@ -216,10 +216,10 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _distanceController.text = '$km km,${meters * 100} meter';
-                    context
-                        .read<CalculatorCubit>()
-                        .setDistance(meters: (additionKMandMeters(meters, km)));
+                    _distanceController.text = '$km km ${meters * 100} m';
+                    context.read<CalculatorCubit>().setDistance(
+                        meters: (additionKMandMeters(meters, km)), unit: 'km');
+                    print(additionKMandMeters(meters, km));
                     context.pop();
                   },
                   child: const Text('Set your distance'))
@@ -271,7 +271,7 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
   }
 
   double additionKMandMeters(int meter, int km) {
-    return km + (meters * 0.1);
+    return (km + (meters * 0.1)) * 1000;
   }
 
   String enumToTitle(Distance? enumValue) {
@@ -327,9 +327,6 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
   }
 
   void _selectValueSet(value) {
-    context
-        .read<CalculatorCubit>()
-        .showCustomDistanceField(isCustomdIstance: false);
     context.read<CalculatorCubit>().setDistance(meters: enumToMeters(value));
     setState(() {
       _distanceItem = value;

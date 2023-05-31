@@ -7,8 +7,7 @@ abstract class RunningCalulator {
   CalcluateEntity setPaceTime(
       {int hours = 0, int minutes = 0, int seconds = 0});
 
-  CalcluateEntity setDistance({required double meters, String unit = 'm'});
-  CalcluateEntity showCustomDistanceField({bool isCustomdIstance = false});
+  CalcluateEntity setDistance({required double meters});
 
   Duration calculatePace(Duration timeRace);
   Duration calculateRace(Duration timeRace);

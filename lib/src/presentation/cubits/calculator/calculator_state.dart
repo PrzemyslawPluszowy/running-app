@@ -12,13 +12,14 @@ class CalculatorInitial extends CalculatorState {
 class CalculatorController extends CalculatorState {
   final Duration timeRace;
   final Duration pace;
-  final bool showCustomDistanceField;
 
   @override
-  List<Object> get props => [pace, timeRace, showCustomDistanceField];
+  List<Object> get props => [
+        pace,
+        timeRace,
+      ];
 
   const CalculatorController({
-    this.showCustomDistanceField = false,
     required this.timeRace,
     required this.pace,
   });

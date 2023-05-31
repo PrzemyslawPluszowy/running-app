@@ -1,5 +1,4 @@
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
-import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 
 class RunningCalculatorImpl implements RunningCalulator {
@@ -19,15 +18,11 @@ class RunningCalculatorImpl implements RunningCalulator {
   }
 
   @override
-  CalcluateEntity setDistance(
-      {required double meters,
-      String unit = 'm',
-      bool customDistanceField = false}) {
-    if (unit == 'm') {
-      distanceInMeter = meters;
-    } else if (unit == 'km') {
-      distanceInMeter = double.parse((meters / 1000).toStringAsFixed(2));
-    }
+  CalcluateEntity setDistance({
+    required double meters,
+  }) {
+    print(meters);
+    distanceInMeter = meters;
     pace = calculatePace(timeRace);
     return CalcluateEntity(
         distance: distanceInMeter, pace: pace, timeRace: timeRace);
@@ -49,14 +44,5 @@ class RunningCalculatorImpl implements RunningCalulator {
     pace = calculatePace(timeRace);
     return CalcluateEntity(
         distance: distanceInMeter, pace: pace, timeRace: timeRace);
-  }
-
-  @override
-  CalcluateEntity showCustomDistanceField({bool isCustomdIstance = false}) {
-    return CalcluateEntity(
-        distance: distanceInMeter,
-        pace: pace,
-        timeRace: timeRace,
-        isCustomDistanceField: isCustomdIstance);
   }
 }

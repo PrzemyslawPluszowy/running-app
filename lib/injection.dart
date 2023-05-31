@@ -8,7 +8,6 @@ import 'package:new_app/src/data/repositories/firebase_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 import 'package:new_app/src/data/repositories/calculator_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/firebase_repository.dart';
-import 'package:new_app/src/domain/usecases/calculator_usecase/is_custom_distance_usecase.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user_uid.dart';
 import 'package:new_app/src/domain/usecases/is_log_in_usecases.dart';
@@ -37,14 +36,13 @@ Future<void> init() async {
   getIt.registerFactory(() => UserCubit(getCurretUserUsecase: getIt.call()));
   getIt.registerFactory(() => PageViewBootomNavigationCubit());
   getIt.registerFactory(() => CalculatorCubit(
-      setDistanceUseCase: getIt.call(),
-      setPaceUseCase: getIt.call(),
-      setRaceTimeUseCase: getIt.call(),
-      isCustomDistanceUseCase: getIt.call()));
+        setDistanceUseCase: getIt.call(),
+        setPaceUseCase: getIt.call(),
+        setRaceTimeUseCase: getIt.call(),
+      ));
 
   //register usecases
-  getIt.registerLazySingleton(
-      () => IsCustomDistanceUseCase(runningCalulator: getIt.call()));
+
   getIt.registerLazySingleton(
       () => SetDistanceUseCase(runningCalulator: getIt.call()));
   getIt.registerLazySingleton(

@@ -17,7 +17,11 @@ class CalculatorScreen extends StatelessWidget {
             colorScheme: colorScheme,
             labelText: "Race Time",
           ),
-          PaceTimeFieldState(colorScheme: colorScheme, labelText: 'pace')
+          PaceTimeFieldState(colorScheme: colorScheme, labelText: 'pace'),
+          OutlinedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.add_task_sharp),
+              label: const Text('Calculate Vdot')),
         ]),
       ),
     );

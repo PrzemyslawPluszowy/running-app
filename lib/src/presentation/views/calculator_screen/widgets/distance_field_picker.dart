@@ -69,7 +69,7 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
       child: TextField(
         style: Theme.of(context)
             .textTheme
-            .displaySmall!
+            .bodyLarge!
             .merge(TextStyle(color: Theme.of(context).colorScheme.primary)),
         controller: _distanceController,
         minLines: 1,
@@ -219,12 +219,11 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
                     _distanceController.text = '$km km ${meters * 100} m';
                     context.read<CalculatorCubit>().setDistance(
                         meters: (additionKMandMeters(meters, km)), unit: 'km');
-                    print(additionKMandMeters(meters, km));
                     context.pop();
                   },
-                  child: const Text('Set your distance'))
+                  child: const Text('Set '))
             ],
-            title: const Text("Pick"),
+            title: const Text("Set your distance'"),
             content: SizedBox(
               height: 200,
               width: 300,

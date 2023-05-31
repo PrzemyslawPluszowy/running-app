@@ -69,7 +69,7 @@ class _RaceTimeFieldState extends State<RaceTimeFieldState> {
       child: TextField(
         style: Theme.of(context)
             .textTheme
-            .displaySmall!
+            .bodyLarge!
             .merge(TextStyle(color: Theme.of(context).colorScheme.primary)),
         controller: _raceTime,
         minLines: 1,

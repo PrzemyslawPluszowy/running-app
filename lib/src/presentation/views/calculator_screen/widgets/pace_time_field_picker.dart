@@ -63,7 +63,7 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
       child: TextField(
         style: Theme.of(context)
             .textTheme
-            .displaySmall!
+            .bodyLarge!
             .merge(TextStyle(color: Theme.of(context).colorScheme.primary)),
         controller: _paceTime,
         minLines: 1,
@@ -117,11 +117,11 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
 
                     context.pop();
                   },
-                  child: const Text('Set time'))
+                  child: const Text('Set pace'))
             ],
-            title: const Text("Pick the time"),
+            title: const Text("Pick your pace"),
             content: SizedBox(
-              height: 200,
+              height: 150,
               width: 300,
               child: Center(
                 child: Row(

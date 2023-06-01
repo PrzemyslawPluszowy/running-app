@@ -8,6 +8,8 @@ import 'package:new_app/src/data/repositories/firebase_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 import 'package:new_app/src/data/repositories/calculator_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/firebase_repository.dart';
+import 'package:new_app/src/domain/usecases/calculator_usecase/get_curret_calc_result_usecase.dart';
+import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user_uid.dart';
 import 'package:new_app/src/domain/usecases/is_log_in_usecases.dart';
@@ -39,10 +41,15 @@ Future<void> init() async {
         setDistanceUseCase: getIt.call(),
         setPaceUseCase: getIt.call(),
         setRaceTimeUseCase: getIt.call(),
+        getVdotUseCase: getIt.call(),
+        getCurretCalcResultUsecase: getIt.call(),
       ));
 
   //register usecases
-
+  getIt.registerLazySingleton(
+      () => GetCurretCalcResultUsecase(runningCalulator: getIt.call()));
+  getIt.registerLazySingleton(
+      () => GetVdotUseCase(runningCalulator: getIt.call()));
   getIt.registerLazySingleton(
       () => SetDistanceUseCase(runningCalulator: getIt.call()));
   getIt.registerLazySingleton(

@@ -11,4 +11,6 @@ abstract class RunningCalulator {
 
   Duration calculatePace(Duration timeRace);
   Duration calculateRace(Duration timeRace);
+  int initCalculateVdot();
+  CalcluateEntity getCurretResultRace();
 }

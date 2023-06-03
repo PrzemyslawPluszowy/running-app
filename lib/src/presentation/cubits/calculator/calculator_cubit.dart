@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/calcluate_race_time_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/calculate_pace_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.dart';
-import 'package:new_app/src/domain/usecases/save_calculated_race.dart';
+import 'package:new_app/src/domain/usecases/calculator_usecase/save_calculated_race.dart';
 import '../../../domain/entities/calcuate_entity.dart';
 part 'calculator_state.dart';
 

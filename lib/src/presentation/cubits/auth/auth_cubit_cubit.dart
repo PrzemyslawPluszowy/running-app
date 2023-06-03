@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
-import 'package:new_app/src/domain/usecases/get_curret_user_uid.dart';
-import 'package:new_app/src/domain/usecases/is_log_in_usecases.dart';
-import 'package:new_app/src/domain/usecases/log_in_usecases.dart';
-import 'package:new_app/src/domain/usecases/log_out_usecases.dart';
-import 'package:new_app/src/domain/usecases/register_user_usecase.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user_uid.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/is_log_in_usecases.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/log_in_usecases.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/log_out_usecases.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/register_user_usecase.dart';
 
 import 'auth_cubit_state.dart';
 

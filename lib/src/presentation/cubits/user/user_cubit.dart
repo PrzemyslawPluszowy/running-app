@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
-import 'package:new_app/src/domain/usecases/get_curret_user.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user.dart';
 
 part 'user_state.dart';
 

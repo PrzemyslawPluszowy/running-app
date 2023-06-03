@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
-import 'package:new_app/src/presentation/widgets/avatar_image.dart';
-import 'package:uuid/uuid.dart';
 
 class CalcluateModel extends CalcluateEntity {
   final String creatorUid;

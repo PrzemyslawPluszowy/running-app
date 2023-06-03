@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 
 import 'package:new_app/src/domain/repositories/firebase_repository.dart';

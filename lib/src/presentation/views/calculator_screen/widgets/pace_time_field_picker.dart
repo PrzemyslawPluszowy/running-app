@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:new_app/src/data/repositories/calculator_repo_impl.dart';
+import 'package:new_app/src/core/ext/extension.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
-
-import '../../../../core/global_method/global_method.dart';
 
 class PaceTimeFieldState extends StatefulWidget {
   const PaceTimeFieldState({
@@ -24,8 +22,8 @@ class PaceTimeFieldState extends StatefulWidget {
 class _PaceTimeFieldState extends State<PaceTimeFieldState> {
   @override
   void initState() {
-    _paceTime = TextEditingController(
-        text: durationToString(RunningCalculatorImpl().pace));
+    String initPace = context.read<CalculatorCubit>().pace.toStoper();
+    _paceTimeTextController = TextEditingController(text: initPace);
     _pickMinutesController = FixedExtentScrollController();
     _pickSecondsController = FixedExtentScrollController();
     super.initState();
@@ -35,29 +33,29 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
   void dispose() {
     _pickMinutesController.dispose();
     _pickSecondsController.dispose();
-    _paceTime.dispose();
+    _paceTimeTextController.dispose();
     super.dispose();
   }
 
   late FixedExtentScrollController _pickMinutesController;
   late FixedExtentScrollController _pickSecondsController;
-
-  late TextEditingController _paceTime;
+  late TextEditingController _paceTimeTextController;
 
   final List<int> minutesCupertinoList = List.generate(60, (index) => index);
   final List<int> secandsCupertinoList = List.generate(60, (index) => index);
 
-  int minutes = 0;
-  int seconds = 0;
+  int _minutes = 0;
+  int _seconds = 0;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<CalculatorCubit, CalculatorState>(
       listener: (context, state) {
+        if (state is CalculatorInitial) {
+          _initValueInState(state);
+        }
         if (state is CalculatorController) {
-          _paceTime.text = durationToString(state.pace);
-          minutes = state.pace.inMinutes.remainder(60);
-          seconds = state.pace.inSeconds.remainder(60);
+          _initValueInState(state);
         }
       },
       child: TextField(
@@ -65,7 +63,7 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
             .textTheme
             .bodyLarge!
             .merge(TextStyle(color: Theme.of(context).colorScheme.primary)),
-        controller: _paceTime,
+        controller: _paceTimeTextController,
         minLines: 1,
         maxLines: 1,
         showCursor: false,
@@ -101,9 +99,18 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
     );
   }
 
+  void _initValueInState(state) {
+    _minutes = state.pace.inMinutes.remainder(60);
+    _seconds = state.pace.inSeconds.remainder(60);
+    _pickMinutesController = FixedExtentScrollController(initialItem: _minutes);
+    _pickSecondsController = FixedExtentScrollController(initialItem: _seconds);
+    _paceTimeTextController =
+        TextEditingController(text: state.pace.toStoper());
+  }
+
   Future<void> _paceTimeDialogPicker({required BuildContext context}) async {
-    _pickMinutesController = FixedExtentScrollController(initialItem: minutes);
-    _pickSecondsController = FixedExtentScrollController(initialItem: seconds);
+    _pickMinutesController = FixedExtentScrollController(initialItem: _minutes);
+    _pickSecondsController = FixedExtentScrollController(initialItem: _seconds);
     return showDialog(
       context: context,
       builder: (context) {
@@ -113,7 +120,7 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
                   onPressed: () {
                     context
                         .read<CalculatorCubit>()
-                        .setPaceTime(minutes: minutes, seconds: seconds);
+                        .setingPaceTime(minutes: _minutes, seconds: _seconds);
 
                     context.pop();
                   },
@@ -135,10 +142,9 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
                           useMagnifier: true,
                           itemExtent: 50,
                           onSelectedItemChanged: (value) {
-                            minutes = value;
-                            context
-                                .read<CalculatorCubit>()
-                                .setPaceTime(minutes: value, seconds: seconds);
+                            _minutes = value;
+                            context.read<CalculatorCubit>().setingPaceTime(
+                                minutes: _minutes, seconds: _seconds);
                           },
                           children: minutesCupertinoList
                               .map((e) => Center(child: Text('$e')))
@@ -153,11 +159,10 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
                           useMagnifier: true,
                           itemExtent: 50,
                           onSelectedItemChanged: (value) {
-                            seconds = value;
+                            _seconds = value;
 
-                            context
-                                .read<CalculatorCubit>()
-                                .setPaceTime(minutes: minutes, seconds: value);
+                            context.read<CalculatorCubit>().setingPaceTime(
+                                minutes: _minutes, seconds: _seconds);
                           },
                           children: secandsCupertinoList
                               .map((e) => Center(child: Text('$e')))

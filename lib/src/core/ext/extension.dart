@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 extension TimestampParase on Timestamp {
   String dateToString() {
-    return DateFormat.yMMMMEEEEd().format(this.toDate()).toString();
+    return DateFormat.yMMMEd().format(this.toDate()).toString();
   }
 }
 

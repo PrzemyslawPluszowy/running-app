@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/src/core/ext/extension.dart';
+import '../../../cubits/calculator/calculator_cubit.dart';
 
 class ResultBoxWidget extends StatelessWidget {
-  const ResultBoxWidget({super.key, this.state});
-  final state;
+  const ResultBoxWidget({super.key, required this.state});
+  final CalcResultSuccces state;
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +31,14 @@ class ResultBoxWidget extends StatelessWidget {
                   Card(
                     child: ListTile(
                       leading: const Icon(Icons.watch_later_outlined),
-                      title: Text(
-                          '${state.resultRaceWithVdot.timeRace.inHours}:${state.resultRaceWithVdot.timeRace.inMinutes.remainder(60)}:${state.resultRaceWithVdot.timeRace.inSeconds.remainder(60)}'),
+                      title: Text(state.resultRaceWithVdot.timeRace.toStoper()),
                       subtitle: const Text('Time Race'),
                     ),
                   ),
                   Card(
                     child: ListTile(
                       leading: const Icon(Icons.add_road_sharp),
-                      title: Text(
-                          '${state.resultRaceWithVdot.pace.inMinutes}:${state.resultRaceWithVdot.pace.inSeconds.remainder(60)}'),
+                      title: Text(state.resultRaceWithVdot.pace.toStoper()),
                       subtitle: const Text('Pace'),
                     ),
                   ),

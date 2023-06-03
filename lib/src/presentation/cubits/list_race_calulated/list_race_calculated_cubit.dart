@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_user_race_list.dart';
@@ -18,7 +17,7 @@ class ListRaceCalculatedCubit extends Cubit<ListRaceCalculatedState> {
 
   void showCurretRaceList() {
     List<CalcluateEntity> list;
-    final stream = getUserRaceListUsecase.call().listen((event) {
+    getUserRaceListUsecase.call().listen((event) {
       list = event;
       emit(ListRaceCalculatedLoaded(list));
     }).onError((handleError) {

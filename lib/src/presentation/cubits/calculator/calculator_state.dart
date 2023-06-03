@@ -5,24 +5,27 @@ abstract class CalculatorState extends Equatable {
 }
 
 class CalculatorInitial extends CalculatorState {
+  final Duration timeRace = const Duration(hours: 0, minutes: 0, seconds: 0);
+  final Duration pace = const Duration(hours: 0, minutes: 0, seconds: 0);
+  final double distanceInMeter = 5000;
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [timeRace, pace, distanceInMeter];
 }
 
 class CalculatorController extends CalculatorState {
   const CalculatorController({
+    required this.distanceInMeter,
     required this.timeRace,
     required this.pace,
-  }) : super();
+  });
 
   final Duration timeRace;
   final Duration pace;
+  final double distanceInMeter;
 
   @override
-  List<Object> get props => [
-        pace,
-        timeRace,
-      ];
+  List<Object> get props => [pace, timeRace, distanceInMeter];
 }
 
 class CalcResultSuccces extends CalculatorState {

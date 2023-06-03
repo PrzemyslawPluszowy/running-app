@@ -1,8 +1,5 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
-
 import '../../domain/entities/user_entity.dart';
 
 abstract class RemoteDataSource {
@@ -21,4 +18,5 @@ abstract class RemoteDataSource {
   Future<void> saveCalculatedRace(CalcluateEntity calc);
   Stream<List<CalcluateEntity>> getUserRaceList();
   Future<void> deleteUserSingleCalculation(String postId);
+  Stream<List<CalcluateEntity>> getAllUserList();
 }

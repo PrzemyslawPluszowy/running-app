@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
@@ -39,7 +40,10 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
               create: (context) =>
-                  di.getIt<ListRaceCalculatedCubit>()..showCurretRaceList())
+                  di.getIt<ListRaceCalculatedCubit>()..showCurretRaceList()),
+          BlocProvider(
+              create: (context) =>
+                  di.getIt<AllUsersListCubit>()..showAllUserCalcList())
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

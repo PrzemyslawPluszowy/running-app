@@ -62,4 +62,9 @@ class FirebaseRepoImpl implements FirebaseRepository {
     // TODO: implement getCurrentUserUid
     throw UnimplementedError();
   }
+
+  @override
+  Stream<List<CalcluateEntity>> getAllUserList() {
+    return remoteDataSource.getAllUserList();
+  }
 }

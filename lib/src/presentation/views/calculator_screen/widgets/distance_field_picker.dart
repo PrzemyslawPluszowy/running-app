@@ -36,7 +36,7 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
   late FixedExtentScrollController _pickKmController;
   late FixedExtentScrollController _pickMetersController;
 
-  late TextEditingController _paceTime;
+  // late TextEditingController _paceTime;
 
   final List<int> _kmList = List.generate(60, (index) => index);
   final List<int> _metersCupertinoList =
@@ -50,7 +50,6 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
         TextEditingController(text: enumToTitle(_distanceItem));
     _pickKmController = FixedExtentScrollController();
     _pickMetersController = FixedExtentScrollController();
-    initVal = context.read<CalculatorCubit>().getInitValue();
 
     super.initState();
   }
@@ -132,7 +131,9 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
                     title: const Text('1 miles'),
                     groupValue: _distanceItem,
                     value: Distance.mile1,
-                    onChanged: (Distance? value) {},
+                    onChanged: (Distance? value) {
+                      _selectValueSet(value);
+                    },
                   ),
                   RadioListTile<Distance>(
                       title: const Text('3km'),
@@ -220,8 +221,9 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
               TextButton(
                   onPressed: () {
                     _distanceController.text = '$km km ${meters * 100} m';
-                    context.read<CalculatorCubit>().setDistance(
-                        meters: (additionKMandMeters(meters, km)), unit: 'km');
+
+                    context.read<CalculatorCubit>().settingDistance(
+                        meters: additionKMandMeters(meters, km));
                     context.pop();
                   },
                   child: const Text('Set '))
@@ -329,7 +331,9 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
   }
 
   void _selectValueSet(value) {
-    context.read<CalculatorCubit>().setDistance(meters: enumToMeters(value));
+    context
+        .read<CalculatorCubit>()
+        .settingDistance(meters: enumToMeters(value));
     setState(() {
       _distanceItem = value;
       _distanceController.text = enumToTitle(value);

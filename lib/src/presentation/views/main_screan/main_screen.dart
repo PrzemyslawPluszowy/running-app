@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/calculator_screen.dart';
-import 'package:new_app/src/presentation/views/list_calculated_screen.dart/list_calculated_screen.dart';
+import 'package:new_app/src/presentation/views/list_calculated_screen/list_calculated_screen.dart';
 import 'package:new_app/src/presentation/views/main_screan/widgets/custom_app_bar_widget.dart';
 
 import '../../cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
+import '../all_users_list_screen/all_users_list_screen.dart';
 import 'widgets/custom_navigation_bar_widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -86,7 +87,7 @@ class _MainScreenState extends State<MainScreen> {
                         userData: loggedUser,
                       ),
                       const Text('1'),
-                      Text('2'),
+                      const AllUserCalculatedListScreen(),
                       ListCalutedCrean(
                         userData: loggedUser,
                       ),

@@ -25,7 +25,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
 
   void initApp() async {
     isLogInUsecase.fireRepository.isSign().listen((userUid) {
-      if (userUid.isNotEmpty || userUid != null) {
+      if (userUid.isNotEmpty) {
         emit(IsLogInState(userUrid: userUid));
       } else {
         emit(IsLogOutState());

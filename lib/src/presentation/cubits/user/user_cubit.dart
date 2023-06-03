@@ -15,7 +15,7 @@ class UserCubit extends Cubit<UserState> {
   void getCurretUser(String uid) async {
     emit(UserLoadingState());
     try {
-      final stream = getCurretUserUsecase.firebaseRepository
+      getCurretUserUsecase.firebaseRepository
           .getCurretUser(uid)
           .listen((event) {
         emit(UserLoadedState(loggedUser: event.first));

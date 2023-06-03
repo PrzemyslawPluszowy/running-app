@@ -1,4 +1,4 @@
-import 'package:new_app/src/data/constDB/estimated_race_result.dart';
+import 'package:new_app/src/core/constants/estimated_race_result.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 
@@ -8,49 +8,18 @@ class RunningCalculatorImpl implements RunningCalulator {
   double distanceInMeter = 5000;
 
   @override
-  Duration calculatePace(Duration timeRace) {
+  Duration calculatePace(Duration timeRace, double distanceInMeter) {
     return Duration(seconds: (timeRace.inSeconds ~/ (distanceInMeter / 1000)));
   }
 
   @override
-  Duration calculateRace(Duration pace) {
+  Duration calculateRace(Duration pace, double distanceInMeter) {
     return Duration(
         seconds: (pace.inSeconds * (distanceInMeter / 1000)).toInt());
   }
 
   @override
-  CalcluateEntity setDistance({
-    required double meters,
-  }) {
-    distanceInMeter = meters;
-    pace = calculatePace(timeRace);
-    return CalcluateEntity(
-        distance: distanceInMeter, pace: pace, timeRace: timeRace);
-  }
-
-  @override
-  CalcluateEntity setPaceTime(
-      {int hours = 0, int minutes = 0, int seconds = 0}) {
-    pace = Duration(hours: hours, minutes: minutes, seconds: seconds);
-    timeRace = calculateRace(pace);
-    return CalcluateEntity(
-        distance: distanceInMeter, pace: pace, timeRace: timeRace);
-  }
-
-  @override
-  CalcluateEntity setRaceTime(
-      {int hours = 0, int minutes = 0, int seconds = 0}) {
-    timeRace = Duration(hours: hours, minutes: minutes, seconds: seconds);
-    pace = calculatePace(timeRace);
-
-    return CalcluateEntity(
-        distance: distanceInMeter, pace: pace, timeRace: timeRace);
-  }
-
-  @override
-  int initCalculateVdot() {
-    CalcluateEntity calc = CalcluateEntity(
-        distance: distanceInMeter, pace: pace, timeRace: timeRace);
+  int initCalculateVdot(CalcluateEntity calc) {
     final int vdot;
     if (calc.distance <= 5000) {
       final toSearchVdot = _calculateClosetValueToVdotTable(calc, 5000);
@@ -73,7 +42,7 @@ class RunningCalculatorImpl implements RunningCalulator {
     int timeinSecond =
         ((targetDistance * calc.timeRace.inSeconds) / calc.distance).round();
     Duration timeRace = Duration(seconds: timeinSecond);
-    Duration pace = calculatePace(calc.timeRace);
+    Duration pace = calculatePace(calc.timeRace, distanceInMeter);
     return CalcluateEntity(
         distance: targetDistance, pace: pace, timeRace: timeRace);
   }
@@ -92,11 +61,5 @@ class RunningCalculatorImpl implements RunningCalulator {
         .indexWhere((element) => element[distanceKey] == closetTime);
     final vdot = estimatedRace[indexVdot]['vdot'];
     return vdot!;
-  }
-
-  @override
-  CalcluateEntity getCurretResultRace() {
-    return CalcluateEntity(
-        distance: distanceInMeter, pace: pace, timeRace: timeRace);
   }
 }

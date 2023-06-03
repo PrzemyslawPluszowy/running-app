@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -182,7 +179,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
           userName: calc.userName ?? 'Unknow User',
           avatarUrl: calc.avatarUrl);
 
-      final ref = await firebaseFirestore
+      await firebaseFirestore
           .collection('calculatedRace')
           .doc(newCalc.id)
           .set(newCalc.toJson());
@@ -220,7 +217,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
           calc.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
 
       yield* list;
-    } catch (e) {}
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
   @override
@@ -230,5 +229,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     } on FirebaseException catch (e) {
       Fluttertoast.showToast(msg: e.code);
     }
+  }
+
+  @override
+  Stream<List<CalcluateEntity>> getAllUserList() async* {
+    final ref = firebaseFirestore.collection('calculatedRace').snapshots();
+    final list = ref.map((event) =>
+        event.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
+    yield* list;
   }
 }

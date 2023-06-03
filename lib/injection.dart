@@ -8,20 +8,20 @@ import 'package:new_app/src/data/repositories/firebase_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 import 'package:new_app/src/data/repositories/calculator_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/firebase_repository.dart';
-import 'package:new_app/src/domain/usecases/calculator_usecase/get_curret_calc_result_usecase.dart';
+import 'package:new_app/src/domain/usecases/calculator_usecase/calcluate_race_time_usecase.dart';
+import 'package:new_app/src/domain/usecases/calculator_usecase/calculate_pace_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_user_race_list.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user_uid.dart';
 import 'package:new_app/src/domain/usecases/is_log_in_usecases.dart';
 import 'package:new_app/src/domain/usecases/list_calculation_useCase/delete_single_user_calculated.dart';
+import 'package:new_app/src/domain/usecases/list_calculation_useCase/get_all_users_calc_list_usecase.dart';
 import 'package:new_app/src/domain/usecases/log_in_usecases.dart';
 import 'package:new_app/src/domain/usecases/log_out_usecases.dart';
 import 'package:new_app/src/domain/usecases/register_user_usecase.dart';
-import 'package:new_app/src/domain/usecases/calculator_usecase/set_distance_usecase.dart';
-import 'package:new_app/src/domain/usecases/calculator_usecase/set_pace_usecases.dart';
-import 'package:new_app/src/domain/usecases/calculator_usecase/set_race_time.dart';
 import 'package:new_app/src/domain/usecases/save_calculated_race.dart';
+import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
@@ -42,18 +42,25 @@ Future<void> init() async {
   getIt.registerFactory(() => UserCubit(getCurretUserUsecase: getIt.call()));
   getIt.registerFactory(() => PageViewBootomNavigationCubit());
   getIt.registerFactory(() => CalculatorCubit(
-        setDistanceUseCase: getIt.call(),
-        setPaceUseCase: getIt.call(),
-        setRaceTimeUseCase: getIt.call(),
         getVdotUseCase: getIt.call(),
-        getCurretCalcResultUsecase: getIt.call(),
         saveCalculatedRaceUsecase: getIt.call(),
+        calculatePaceUseCase: getIt.call(),
+        calculateRaceTimeUseCase: getIt.call(),
       ));
   getIt.registerFactory(() => ListRaceCalculatedCubit(
       getUserRaceListUsecase: getIt.call(),
       deleteSingleUserCalculatedUseCase: getIt.call()));
+  getIt.registerFactory(
+      () => AllUsersListCubit(getAllUsersCalcList: getIt.call()));
 
   //register usecases
+  getIt.registerLazySingleton(
+      () => CalculatePaceUseCase(runningCalulator: getIt.call()));
+  getIt.registerLazySingleton(
+      () => CalculateRaceTimeUseCase(runningCalulator: getIt.call()));
+  getIt.registerLazySingleton(
+      () => GetAllUsersCalcList(remoteDataSource: getIt.call()));
+
   getIt.registerLazySingleton(() =>
       DeleteSingleUserCalculatedUseCase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(
@@ -61,15 +68,8 @@ Future<void> init() async {
   getIt.registerLazySingleton(
       () => SaveCalculatedRaceUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(
-      () => GetCurretCalcResultUsecase(runningCalulator: getIt.call()));
-  getIt.registerLazySingleton(
       () => GetVdotUseCase(runningCalulator: getIt.call()));
-  getIt.registerLazySingleton(
-      () => SetDistanceUseCase(runningCalulator: getIt.call()));
-  getIt.registerLazySingleton(
-      () => SetPaceUseCase(runningCalulator: getIt.call()));
-  getIt.registerLazySingleton(
-      () => SetRaceTimeUseCase(runningCalulator: getIt.call()));
+
   getIt.registerLazySingleton(
       () => IsLogInUsecase(fireRepository: getIt.call()));
   getIt.registerLazySingleton(

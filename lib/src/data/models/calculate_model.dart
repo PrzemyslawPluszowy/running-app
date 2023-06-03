@@ -1,40 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
+import 'package:new_app/src/presentation/widgets/avatar_image.dart';
+import 'package:uuid/uuid.dart';
 
 class CalcluateModel extends CalcluateEntity {
-  final double distance;
-  final Duration pace;
-  final Duration timeRace;
-  int? vdot;
+  final String creatorUid;
   final Timestamp dateCreated;
 
+  final String id;
+  final String userName;
+  final double distance;
+  final int paceInSecond;
+  final int timeInSecond;
+  int? vdot;
+  String? avatarUrl;
+
   CalcluateModel(
-      {required this.dateCreated,
+      {required this.userName,
+      required this.creatorUid,
+      required this.id,
+      required this.dateCreated,
       required this.distance,
-      required this.pace,
-      required this.timeRace,
-      this.vdot})
+      required this.paceInSecond,
+      required this.timeInSecond,
+      this.vdot,
+      this.avatarUrl})
       : super(
+            avatarUrl: avatarUrl,
+            userName: userName,
+            creatorUid: creatorUid,
             distance: distance,
-            pace: pace,
-            timeRace: timeRace,
+            pace: Duration(seconds: paceInSecond),
+            timeRace: Duration(seconds: timeInSecond),
             createdDate: dateCreated,
             vdot: vdot);
 
   factory CalcluateModel.fromSnapshot(DocumentSnapshot snap) {
-    var snapshot = snap as Map<String, dynamic>;
+    var snapshot = snap.data() as Map<String, dynamic>;
     return CalcluateModel(
         dateCreated: snapshot['dateCreated'],
         distance: snapshot['distance'],
-        pace: snapshot['pace'],
-        timeRace: snapshot['timeRace'],
-        vdot: snapshot['vdot']);
+        paceInSecond: snapshot['paceInSecond'],
+        timeInSecond: snapshot['timeInSecond'],
+        vdot: snapshot['vdot'],
+        id: snapshot['id'],
+        creatorUid: snapshot['creatorUid'],
+        userName: snapshot['userName'],
+        avatarUrl: snapshot['avatarUrl']);
   }
   Map<String, dynamic> toJson() => {
         'dateCreated': dateCreated,
+        'creatorUid': creatorUid,
+        'userName': userName,
         'distance': distance,
-        'pace': pace,
-        'timeRace': timeRace,
-        'vdot': vdot
+        'paceInSecond': paceInSecond,
+        'timeInSecond': timeInSecond,
+        'vdot': vdot,
+        'id': id,
+        'avatarUrl': avatarUrl
       };
 }

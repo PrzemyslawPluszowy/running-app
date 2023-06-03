@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/entities/user_entity.dart';
+import '../../../widgets/avatar_circle_global_widget.dart';
+import '../../../widgets/vdot_circle_widget.dart';
 
 Container customAppBar(UserEntity loggedUser, BuildContext context) {
   return Container(
@@ -13,7 +15,7 @@ Container customAppBar(UserEntity loggedUser, BuildContext context) {
       children: [
         Container(
             decoration: BoxDecoration(
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(blurRadius: 4, blurStyle: BlurStyle.outer)
                 ],
                 color: Theme.of(context).colorScheme.primary,
@@ -51,93 +53,15 @@ Container customAppBar(UserEntity loggedUser, BuildContext context) {
                     Positioned(
                       top: 10,
                       right: 70,
-                      child: Container(
-                        height: 90,
-                        width: 90,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 4, blurStyle: BlurStyle.normal)
-                          ],
-                          gradient:
-                              LinearGradient(begin: Alignment(0.2, 2), colors: [
-                            Color.fromARGB(255, 242, 244, 242),
-                            Color.fromARGB(255, 229, 229, 234),
-                            Color.fromARGB(255, 255, 255, 255),
-                            Color.fromARGB(255, 109, 44, 239)
-                          ]),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          //this padding will be you border size
-                          padding: const EdgeInsets.all(7.0),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.white, shape: BoxShape.circle),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Your ',
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  Text(
-                                    'vdot ',
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  loggedUser.vdot != null
-                                      ? Text(
-                                          loggedUser.height.toString(),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
-                                        )
-                                      : const Icon(Icons.question_mark),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                      child: VdotVircleWidget(
+                        vdot: loggedUser.vdot,
                       ),
                     ),
                     Positioned(
                       top: 10,
                       right: 10,
-                      child: Container(
-                        height: 85,
-                        width: 85,
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 4, blurStyle: BlurStyle.normal)
-                          ],
-                          gradient:
-                              LinearGradient(begin: Alignment(0.2, 2), colors: [
-                            Color.fromARGB(255, 242, 244, 242),
-                            Color.fromARGB(255, 229, 229, 234),
-                            Color.fromARGB(255, 255, 255, 255),
-                            Color.fromARGB(255, 109, 44, 239)
-                          ]),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          //this padding will be you border size
-                          padding: const EdgeInsets.all(7.0),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.white, shape: BoxShape.circle),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              foregroundImage:
-                                  NetworkImage(loggedUser.urlImageAvatar!),
-                            ),
-                          ),
-                        ),
+                      child: CircleAvatarGlobalWidget(
+                        imageUrl: loggedUser.urlImageAvatar!,
                       ),
                     ),
                   ],

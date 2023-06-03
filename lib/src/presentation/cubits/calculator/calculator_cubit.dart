@@ -6,6 +6,7 @@ import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.
 import 'package:new_app/src/domain/usecases/calculator_usecase/set_distance_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/set_pace_usecases.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/set_race_time.dart';
+import 'package:new_app/src/domain/usecases/save_calculated_race.dart';
 
 import '../../../domain/entities/calcuate_entity.dart';
 
@@ -13,7 +14,8 @@ part 'calculator_state.dart';
 
 class CalculatorCubit extends Cubit<CalculatorState> {
   CalculatorCubit(
-      {required this.getCurretCalcResultUsecase,
+      {required this.saveCalculatedRaceUsecase,
+      required this.getCurretCalcResultUsecase,
       required this.getVdotUseCase,
       required this.setPaceUseCase,
       required this.setRaceTimeUseCase,
@@ -24,6 +26,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   final SetDistanceUseCase setDistanceUseCase;
   final GetVdotUseCase getVdotUseCase;
   final GetCurretCalcResultUsecase getCurretCalcResultUsecase;
+  final SaveCalculatedRaceUsecase saveCalculatedRaceUsecase;
 
   void setRaceTime({int hours = 0, int minutes = 0, int seconds = 0}) {
     CalcluateEntity race = setRaceTimeUseCase.call(hours, minutes, seconds);
@@ -50,7 +53,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void setVdot() {
     int vdot = getVdotUseCase.call();
     final result = getCurretCalcResultUsecase.call();
-    print(vdot);
     if (vdot > 70) {
       emit(const CalcResultError(
           error: 'Your result is too incredible to calc VDOT'));
@@ -62,5 +64,21 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       result.vdot = vdot;
       emit(CalcResultSuccces(resultRaceWithVdot: result));
     }
+  }
+
+  Future<void> saveCalculatedRace(CalcluateEntity raceCalc) async {
+    emit(RaceSaving());
+    try {
+      Future.delayed(const Duration(seconds: 5));
+
+      await saveCalculatedRaceUsecase.call(raceCalc);
+      emit(RaceSaved());
+    } catch (e) {
+      emit(SaveRaceErr());
+    }
+  }
+
+  CalcluateEntity getInitValue() {
+    return getCurretCalcResultUsecase.call();
   }
 }

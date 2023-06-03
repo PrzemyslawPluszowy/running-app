@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
+import 'package:new_app/src/presentation/cubits/list_race_calulated/list_race_calculated_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
-import 'package:new_app/src/utils/routing/routing.dart';
+import 'package:new_app/src/core/routing/routing.dart';
 
-import 'src/utils/theme/color_schemes.g.dart';
+import 'src/core/theme/color_schemes.g.dart';
 import 'injection.dart' as di;
 
 void main() async {
@@ -35,7 +36,10 @@ class MyApp extends StatelessWidget {
               create: (context) => di.getIt<PageViewBootomNavigationCubit>()),
           BlocProvider(
             create: (context) => di.getIt<CalculatorCubit>(),
-          )
+          ),
+          BlocProvider(
+              create: (context) =>
+                  di.getIt<ListRaceCalculatedCubit>()..showCurretRaceList())
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

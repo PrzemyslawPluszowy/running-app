@@ -1,13 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CalcluateEntity {
-  double distance;
-  Duration pace;
-  Duration timeRace;
-  int? vdot;
+  String? id;
+  String? creatorUid;
+  String? avatarUrl;
+  String? userName;
   Timestamp? createdDate;
+  int? vdot;
+
+  final double distance;
+  final Duration pace;
+  final Duration timeRace;
 
   CalcluateEntity({
+    this.avatarUrl,
+    this.userName,
+    this.creatorUid,
     required this.distance,
     required this.pace,
     required this.timeRace,

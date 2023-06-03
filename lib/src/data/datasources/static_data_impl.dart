@@ -13,3 +13,5 @@ class StaticDataImpl implements StaticData {
     return bmi;
   }
 }
+
+class Helper {}

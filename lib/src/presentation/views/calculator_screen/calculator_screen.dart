@@ -1,21 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:new_app/src/domain/entities/calcuate_entity.dart';
+import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/widgets/distance_field_picker.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/widgets/pace_time_field_picker.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/widgets/race_time_field_picker.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/widgets/result_box_widget.dart';
-import 'package:new_app/src/presentation/widgets/avatar_image.dart';
 
 class CalculatorScreen extends StatefulWidget {
-  const CalculatorScreen({super.key});
+  const CalculatorScreen({super.key, required this.userData});
+  final UserEntity userData;
 
   @override
   State<CalculatorScreen> createState() => _CalculatorScreenState();
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
+  late CalcluateEntity calcToSave;
+
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -24,6 +30,24 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         listener: (context, state) {
           if (state is CalcResultError) {
             _showVdotError(state);
+          }
+          if (state is CalcResultSuccces) {
+            var result = state.resultRaceWithVdot;
+            calcToSave = CalcluateEntity(
+                avatarUrl: widget.userData.urlImageAvatar,
+                distance: result.distance,
+                pace: result.pace,
+                timeRace: result.timeRace,
+                createdDate: Timestamp.now(),
+                userName: widget.userData.userName,
+                creatorUid: widget.userData.uid,
+                vdot: result.vdot);
+          }
+          if (state is RaceSaved) {
+            Fluttertoast.showToast(msg: 'Race is saved');
+          }
+          if (state is SaveRaceErr) {
+            Fluttertoast.showToast(msg: 'Something went wrong');
           }
         },
         builder: (context, state) {
@@ -65,7 +89,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: OutlinedButton.icon(
                           onPressed: () {
                             context.read<CalculatorCubit>().setVdot();
@@ -83,7 +107,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                 backgroundColor: MaterialStateProperty.all(
                                     colorScheme.primary)),
                             onPressed: () {
-                              context.read<CalculatorCubit>().setVdot();
+                              context
+                                  .read<CalculatorCubit>()
+                                  .saveCalculatedRace(calcToSave);
                             },
                             icon: const Icon(Icons.save_as_outlined),
                             label: const Text('Save your result'))

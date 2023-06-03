@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,8 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:new_app/src/data/datasources/remote_data_source.dart';
 import 'package:new_app/src/data/datasources/static_data_impl.dart';
+import 'package:new_app/src/data/models/calculate_model.dart';
 import 'package:new_app/src/data/models/user_model.dart';
+import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
+import 'package:uuid/uuid.dart';
 
 class RemoteDataSourceImpl implements RemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
@@ -60,7 +65,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<void> registerUser(UserEntity user) async {
     if (user.userName == null || user.userName!.isEmpty) {
-      Fluttertoast.showToast(msg: 'Input correct name');
+      Fluttertoast.showToast(
+        msg: 'Input correct name',
+      );
       return;
     }
     if (user.age == null) {
@@ -129,8 +136,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
           Fluttertoast.showToast(msg: 'Account Created');
         });
       }
-    } catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
+    } on FirebaseException catch (e) {
+      Fluttertoast.showToast(msg: e.code);
     }
   }
 
@@ -148,9 +155,80 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      print('login');
     } on FirebaseAuthException catch (e) {
-      print(e.code);
+      {
+        Fluttertoast.showToast(msg: e.code);
+      }
+    } catch (e) {
+      {
+        Fluttertoast.showToast(msg: e.toString());
+      }
+    }
+  }
+
+  @override
+  Future<void> saveCalculatedRace(CalcluateEntity calc) async {
+    String id = const Uuid().v1();
+    try {
+      String userUid = await getCurrentUserUid();
+      CalcluateModel newCalc = CalcluateModel(
+          vdot: calc.vdot,
+          dateCreated: calc.createdDate ?? Timestamp.now(),
+          distance: calc.distance,
+          paceInSecond: calc.pace.inSeconds,
+          timeInSecond: calc.timeRace.inSeconds,
+          id: id,
+          creatorUid: userUid,
+          userName: calc.userName ?? 'Unknow User',
+          avatarUrl: calc.avatarUrl);
+
+      final ref = await firebaseFirestore
+          .collection('calculatedRace')
+          .doc(newCalc.id)
+          .set(newCalc.toJson());
+
+      updateVdot(newCalc.vdot);
+    } on FirebaseException catch (e) {
+      Fluttertoast.showToast(msg: e.code);
+    } catch (e) {
+      {
+        Fluttertoast.showToast(msg: e.toString());
+      }
+    }
+  }
+
+  Future<void> updateVdot(int? vdot) async {
+    String userUid = await getCurrentUserUid();
+
+    if (vdot != null) {
+      await firebaseFirestore
+          .collection('users')
+          .doc(userUid)
+          .update({'vdot': vdot});
+    }
+  }
+
+  @override
+  Stream<List<CalcluateEntity>> getUserRaceList() async* {
+    try {
+      var userUid = await getCurrentUserUid();
+
+      final ref = firebaseFirestore
+          .collection('calculatedRace')
+          .where('creatorUid', isEqualTo: userUid);
+      final list = ref.snapshots().map((calc) =>
+          calc.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
+
+      yield* list;
+    } catch (e) {}
+  }
+
+  @override
+  Future<void> deleteUserSingleCalculation(String postId) async {
+    try {
+      await firebaseFirestore.collection('calculatedRace').doc(postId).delete();
+    } on FirebaseException catch (e) {
+      Fluttertoast.showToast(msg: e.code);
     }
   }
 }

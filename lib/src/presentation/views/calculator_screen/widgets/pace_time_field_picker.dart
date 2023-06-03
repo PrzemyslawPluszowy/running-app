@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:new_app/src/data/repositories/calculator_repo_impl.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
 
-import '../../../../utils/global_method/global_method.dart';
+import '../../../../core/global_method/global_method.dart';
 
 class PaceTimeFieldState extends StatefulWidget {
   const PaceTimeFieldState({

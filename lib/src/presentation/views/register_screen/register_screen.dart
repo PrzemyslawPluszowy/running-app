@@ -8,7 +8,7 @@ import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_state.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:new_app/src/utils/constants/const.dart';
+import 'package:new_app/src/core/constants/const.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../widgets/avatar_image.dart';

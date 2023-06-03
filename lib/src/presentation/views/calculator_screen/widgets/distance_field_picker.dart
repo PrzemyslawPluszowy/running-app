@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
 
 enum Distance {
@@ -40,7 +41,7 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
   final List<int> _kmList = List.generate(60, (index) => index);
   final List<int> _metersCupertinoList =
       List.generate(10, (index) => index * 100);
-
+  late CalcluateEntity initVal;
   int km = 0;
   int meters = 0;
   @override
@@ -49,6 +50,8 @@ class _DistanceFieldWidgetState extends State<DistanceFieldWidget> {
         TextEditingController(text: enumToTitle(_distanceItem));
     _pickKmController = FixedExtentScrollController();
     _pickMetersController = FixedExtentScrollController();
+    initVal = context.read<CalculatorCubit>().getInitValue();
+
     super.initState();
   }
 

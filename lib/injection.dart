@@ -9,19 +9,23 @@ import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 import 'package:new_app/src/data/repositories/calculator_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/firebase_repository.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_curret_calc_result_usecase.dart';
+import 'package:new_app/src/domain/usecases/calculator_usecase/get_user_race_list.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user.dart';
 import 'package:new_app/src/domain/usecases/get_curret_user_uid.dart';
 import 'package:new_app/src/domain/usecases/is_log_in_usecases.dart';
+import 'package:new_app/src/domain/usecases/list_calculation_useCase/delete_single_user_calculated.dart';
 import 'package:new_app/src/domain/usecases/log_in_usecases.dart';
 import 'package:new_app/src/domain/usecases/log_out_usecases.dart';
 import 'package:new_app/src/domain/usecases/register_user_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/set_distance_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/set_pace_usecases.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/set_race_time.dart';
+import 'package:new_app/src/domain/usecases/save_calculated_race.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
+import 'package:new_app/src/presentation/cubits/list_race_calulated/list_race_calculated_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
 
 final getIt = GetIt.instance;
@@ -43,9 +47,19 @@ Future<void> init() async {
         setRaceTimeUseCase: getIt.call(),
         getVdotUseCase: getIt.call(),
         getCurretCalcResultUsecase: getIt.call(),
+        saveCalculatedRaceUsecase: getIt.call(),
       ));
+  getIt.registerFactory(() => ListRaceCalculatedCubit(
+      getUserRaceListUsecase: getIt.call(),
+      deleteSingleUserCalculatedUseCase: getIt.call()));
 
   //register usecases
+  getIt.registerLazySingleton(() =>
+      DeleteSingleUserCalculatedUseCase(firebaseRepository: getIt.call()));
+  getIt.registerLazySingleton(
+      () => GetUserRaceListUsecase(firebaseRepository: getIt.call()));
+  getIt.registerLazySingleton(
+      () => SaveCalculatedRaceUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(
       () => GetCurretCalcResultUsecase(runningCalulator: getIt.call()));
   getIt.registerLazySingleton(

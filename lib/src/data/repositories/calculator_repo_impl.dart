@@ -74,7 +74,6 @@ class RunningCalculatorImpl implements RunningCalulator {
         ((targetDistance * calc.timeRace.inSeconds) / calc.distance).round();
     Duration timeRace = Duration(seconds: timeinSecond);
     Duration pace = calculatePace(calc.timeRace);
-    print(pace);
     return CalcluateEntity(
         distance: targetDistance, pace: pace, timeRace: timeRace);
   }

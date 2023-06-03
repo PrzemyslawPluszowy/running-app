@@ -1,4 +1,5 @@
 import 'package:new_app/src/data/datasources/remote_data_source.dart';
+import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/domain/repositories/firebase_repository.dart';
 
@@ -6,11 +7,6 @@ class FirebaseRepoImpl implements FirebaseRepository {
   final RemoteDataSource remoteDataSource;
 
   FirebaseRepoImpl({required this.remoteDataSource});
-  @override
-  Future<String> getCurrentUserUid() {
-    // TODO: implement getCurrentUserUid
-    throw UnimplementedError();
-  }
 
   @override
   Stream<List<UserEntity>> getCurretUser(String uid) {
@@ -44,5 +40,26 @@ class FirebaseRepoImpl implements FirebaseRepository {
   @override
   Future<void> logIn(String email, String password) {
     return remoteDataSource.logIn(email, password);
+  }
+
+  @override
+  Future<void> saveCalculatedRace(CalcluateEntity calc) {
+    return remoteDataSource.saveCalculatedRace(calc);
+  }
+
+  @override
+  Stream<List<CalcluateEntity>> getUserRaceList() {
+    return remoteDataSource.getUserRaceList();
+  }
+
+  @override
+  Future<void> deleteUserSingleCalculation(String postId) {
+    return remoteDataSource.deleteUserSingleCalculation(postId);
+  }
+
+  @override
+  Future<String> getCurrentUserUid() {
+    // TODO: implement getCurrentUserUid
+    throw UnimplementedError();
   }
 }

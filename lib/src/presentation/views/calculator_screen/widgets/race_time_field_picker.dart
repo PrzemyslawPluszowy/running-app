@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
 
 import '../../../../data/repositories/calculator_repo_impl.dart';
-import '../../../../utils/global_method/global_method.dart';
+import '../../../../core/global_method/global_method.dart';
 
 class RaceTimeFieldState extends StatefulWidget {
   const RaceTimeFieldState({

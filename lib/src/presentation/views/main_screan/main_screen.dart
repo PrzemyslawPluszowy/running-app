@@ -3,18 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/calculator_screen.dart';
+import 'package:new_app/src/presentation/views/list_calculated_screen.dart/list_calculated_screen.dart';
 import 'package:new_app/src/presentation/views/main_screan/widgets/custom_app_bar_widget.dart';
 
 import '../../cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'widgets/custom_navigation_bar_widget.dart';
-
-List<Widget> screens = [
-  CalculatorScreen(),
-  Text('1'),
-  Text('2'),
-  Text('2'),
-  Text('4')
-];
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.uid});
@@ -88,7 +81,17 @@ class _MainScreenState extends State<MainScreen> {
                 child: PageView(
                     allowImplicitScrolling: true,
                     controller: _pageController,
-                    children: screens),
+                    children: [
+                      CalculatorScreen(
+                        userData: loggedUser,
+                      ),
+                      const Text('1'),
+                      Text('2'),
+                      ListCalutedCrean(
+                        userData: loggedUser,
+                      ),
+                      Text('4')
+                    ]),
               ),
             ),
           )

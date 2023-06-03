@@ -135,5 +135,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void logIn() {
     context.read<AuthCubit>().loginregisterUser(
         email: _emailController.text, password: _passwordController.text);
+    context.read<AuthCubit>().initApp();
   }
 }

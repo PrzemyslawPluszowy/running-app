@@ -1,4 +1,4 @@
-import '../repositories/firebase_repository.dart';
+import '../../repositories/firebase_repository.dart';
 
 class LogInUserUsecase {
   final FirebaseRepository fireRepository;

@@ -5,7 +5,7 @@ class GetCurretUserUsecase {
   final FirebaseRepository firebaseRepository;
 
   GetCurretUserUsecase({required this.firebaseRepository});
-  Stream<List<UserEntity>> call(String uid) {
-    return firebaseRepository.getCurretUser(uid);
+  Stream<List<UserEntity>> call() {
+    return firebaseRepository.getCurretUser();
   }
 }

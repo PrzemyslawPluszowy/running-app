@@ -23,9 +23,9 @@ class RouteConfig {
         GoRoute(
           path: '/main/:uid',
           builder: (context, state) {
-            final query = state.queryParameters['uid']; // may be null
+            // final query = state.queryParameters['uid']; // may be null
 
-            return MainScreen(uid: query!);
+            return const MainScreen();
           },
         ),
         GoRoute(

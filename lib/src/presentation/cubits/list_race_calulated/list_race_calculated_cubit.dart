@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
-import 'package:new_app/src/domain/usecases/list_calculation_useCase/get_user_race_list.dart';
-import 'package:new_app/src/domain/usecases/list_calculation_useCase/delete_single_user_calculated.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/get_user_race_list.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/delete_single_user_calculated.dart';
 
 part 'list_race_calculated_state.dart';
 
@@ -17,6 +17,7 @@ class ListRaceCalculatedCubit extends Cubit<ListRaceCalculatedState> {
 
   void showCurretRaceList() {
     List<CalcluateEntity> list;
+    emit(ListRaceCalculatedLoading());
     getUserRaceListUsecase.call().listen((event) {
       list = event;
       emit(ListRaceCalculatedLoaded(list));

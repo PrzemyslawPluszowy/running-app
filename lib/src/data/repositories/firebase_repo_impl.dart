@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_app/src/data/datasources/remote_data_source.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
@@ -9,12 +10,12 @@ class FirebaseRepoImpl implements FirebaseRepository {
   FirebaseRepoImpl({required this.remoteDataSource});
 
   @override
-  Stream<List<UserEntity>> getCurretUser(String uid) {
-    return remoteDataSource.getCurretUser(uid);
+  Stream<List<UserEntity>> getCurretUser() {
+    return remoteDataSource.getCurretUser();
   }
 
   @override
-  Stream<String> isSign() {
+  Stream<User?> isSign() {
     return remoteDataSource.isSign();
   }
 
@@ -64,7 +65,7 @@ class FirebaseRepoImpl implements FirebaseRepository {
   }
 
   @override
-  Stream<List<CalcluateEntity>> getAllUserList() {
+  Stream<List<CalcluateEntity>> getAllUsersCalcList() {
     return remoteDataSource.getAllUserList();
   }
 }

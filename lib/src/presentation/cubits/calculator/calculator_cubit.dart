@@ -42,6 +42,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void settingDistance({
     required double meters,
   }) {
+    print(meters);
     distanceInMeter = meters;
     pace = calculatePaceUseCase.call(timeRace, distanceInMeter);
     emit(CalculatorController(
@@ -55,7 +56,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
     final CalcluateEntity calc = CalcluateEntity(
         distance: distanceInMeter, pace: pace, timeRace: timeRace);
     int vdot = getVdotUseCase.call(calc);
-    print(vdot);
     if (vdot > 85) {
       emit(const CalcResultError(
           error: 'Your result is too incredible to calc VDOT'));

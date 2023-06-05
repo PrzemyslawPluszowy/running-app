@@ -52,10 +52,24 @@ class _PaceTimeFieldState extends State<PaceTimeFieldState> {
     return BlocListener<CalculatorCubit, CalculatorState>(
       listener: (context, state) {
         if (state is CalculatorInitial) {
-          _initValueInState(state);
+          _minutes = state.pace.inMinutes.remainder(60);
+          _seconds = state.pace.inSeconds.remainder(60);
+          _pickMinutesController =
+              FixedExtentScrollController(initialItem: _minutes);
+          _pickSecondsController =
+              FixedExtentScrollController(initialItem: _seconds);
+          _paceTimeTextController =
+              TextEditingController(text: state.pace.toStoper());
         }
         if (state is CalculatorController) {
-          _initValueInState(state);
+          _minutes = state.pace.inMinutes.remainder(60);
+          _seconds = state.pace.inSeconds.remainder(60);
+          _pickMinutesController =
+              FixedExtentScrollController(initialItem: _minutes);
+          _pickSecondsController =
+              FixedExtentScrollController(initialItem: _seconds);
+          _paceTimeTextController =
+              TextEditingController(text: state.pace.toStoper());
         }
       },
       child: TextField(

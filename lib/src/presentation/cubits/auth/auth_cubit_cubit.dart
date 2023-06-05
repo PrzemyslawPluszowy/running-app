@@ -24,9 +24,9 @@ class AuthCubit extends Cubit<AuthCubitState> {
   final GetCurretUserUidUsecase getCurretUserUidUsecase;
 
   void initApp() async {
-    isLogInUsecase.fireRepository.isSign().listen((userUid) {
-      if (userUid.isNotEmpty) {
-        emit(IsLogInState(userUrid: userUid));
+    isLogInUsecase.call().listen((event) {
+      if (event != null) {
+        emit(IsLogInState());
       } else {
         emit(IsLogOutState());
       }
@@ -38,6 +38,8 @@ class AuthCubit extends Cubit<AuthCubitState> {
     await Future.delayed(const Duration(seconds: 2), () {});
 
     try {
+      await Future.delayed(const Duration(seconds: 2), () {});
+
       await registerUserUsecase.call(user);
       emit(AuthCubiLoaded());
     } catch (e) {
@@ -48,19 +50,15 @@ class AuthCubit extends Cubit<AuthCubitState> {
   Future<void> loginregisterUser(
       {required String email, required String password}) async {
     emit(AuthCubitLoading());
+
     await Future.delayed(const Duration(seconds: 2), () {});
+
     logInUserUsecase.call(email, password);
     try {
       emit(AuthCubiLoaded());
     } catch (e) {
       emit(AuthCubitError(error: e.toString()));
     }
-  }
-
-  Future<String> getCurretUid() async {
-    String uid;
-    uid = await getCurretUserUidUsecase.firebaseRepository.getCurrentUserUid();
-    return uid;
   }
 
   void logout() {

@@ -7,8 +7,12 @@ abstract class AllUsersListState extends Equatable {
   List<Object> get props => [];
 }
 
-class AllUsersListInitial extends AllUsersListState {
+class AllUsersListInitial extends AllUsersListState {}
+
+class AllUsersListLoaded extends AllUsersListState {
   final List<CalcluateEntity> listToshow;
 
-  const AllUsersListInitial({required this.listToshow});
+  const AllUsersListLoaded({required this.listToshow});
 }
+
+class AllUsersListLoading extends AllUsersListState {}

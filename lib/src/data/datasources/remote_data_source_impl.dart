@@ -31,27 +31,20 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Stream<List<UserEntity>> getCurretUser(String uid) {
+  Stream<List<UserEntity>> getCurretUser() async* {
+    var curretuid = await getCurrentUserUid();
     final user = firebaseFirestore
         .collection('users')
-        .where('uid', isEqualTo: uid)
+        .where('uid', isEqualTo: curretuid)
         .limit(1);
 
-    return user.snapshots().map((querySnap) =>
+    yield* user.snapshots().map((querySnap) =>
         querySnap.docs.map((e) => UserModel.fromSnapshot(e)).toList());
   }
 
   @override
-  Stream<String> isSign() async* {
-    StreamController<String> userUid = StreamController<String>();
-    firebaseAuth.authStateChanges().listen((User? user) {
-      if (user == null) {
-        return;
-      } else {
-        userUid.add(user.uid);
-      }
-    });
-    yield* userUid.stream;
+  Stream<User?> isSign() async* {
+    yield* firebaseAuth.authStateChanges();
   }
 
   @override
@@ -206,6 +199,23 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
+  Future<void> deleteUserSingleCalculation(String postId) async {
+    try {
+      await firebaseFirestore.collection('calculatedRace').doc(postId).delete();
+    } on FirebaseException catch (e) {
+      Fluttertoast.showToast(msg: e.code);
+    }
+  }
+
+  @override
+  Stream<List<CalcluateEntity>> getAllUserList() async* {
+    final ref = firebaseFirestore.collection('calculatedRace');
+    final list = ref.snapshots().map((event) =>
+        event.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
+    yield* list;
+  }
+
+  @override
   Stream<List<CalcluateEntity>> getUserRaceList() async* {
     try {
       var userUid = await getCurrentUserUid();
@@ -220,22 +230,5 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
     }
-  }
-
-  @override
-  Future<void> deleteUserSingleCalculation(String postId) async {
-    try {
-      await firebaseFirestore.collection('calculatedRace').doc(postId).delete();
-    } on FirebaseException catch (e) {
-      Fluttertoast.showToast(msg: e.code);
-    }
-  }
-
-  @override
-  Stream<List<CalcluateEntity>> getAllUserList() async* {
-    final ref = firebaseFirestore.collection('calculatedRace').snapshots();
-    final list = ref.map((event) =>
-        event.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
-    yield* list;
   }
 }

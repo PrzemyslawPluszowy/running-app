@@ -12,12 +12,10 @@ class UserCubit extends Cubit<UserState> {
 
   final GetCurretUserUsecase getCurretUserUsecase;
 
-  void getCurretUser(String uid) async {
+  void getCurretUser() async {
     emit(UserLoadingState());
     try {
-      getCurretUserUsecase.firebaseRepository
-          .getCurretUser(uid)
-          .listen((event) {
+      getCurretUserUsecase.firebaseRepository.getCurretUser().listen((event) {
         emit(UserLoadedState(loggedUser: event.first));
       });
     } on SocketException catch (e) {

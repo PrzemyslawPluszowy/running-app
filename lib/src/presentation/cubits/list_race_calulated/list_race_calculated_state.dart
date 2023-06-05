@@ -8,17 +8,17 @@ abstract class ListRaceCalculatedState extends Equatable {
 }
 
 class ListRaceCalculatedInitial extends ListRaceCalculatedState {
+  final List<CalcluateEntity> listUserRace = [];
   @override
-  List<Object> get props => [];
+  List<Object> get props => [listUserRace];
 }
 
-class ListRaceCalculatedLoading extends ListRaceCalculatedState {
-  @override
-  List<Object> get props => [];
-}
+class ListRaceCalculatedLoading extends ListRaceCalculatedState {}
 
 class ListRaceCalculatedLoaded extends ListRaceCalculatedState {
   final List<CalcluateEntity> listUserRace;
+
+  @override
   List<Object> get props => [listUserRace];
 
   const ListRaceCalculatedLoaded(this.listUserRace);

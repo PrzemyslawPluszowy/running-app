@@ -59,10 +59,26 @@ class _RaceTimeFieldState extends State<RaceTimeFieldState> {
     return BlocListener<CalculatorCubit, CalculatorState>(
       listener: (context, state) {
         if (state is CalculatorInitial) {
-          _initValueInState(state);
+          _hours = state.timeRace.inHours;
+          _minutes = state.timeRace.inMinutes.remainder(60);
+          _seconds = state.timeRace.inSeconds.remainder(60);
+          _pickMinutesController =
+              FixedExtentScrollController(initialItem: _minutes);
+          _pickSecondsController =
+              FixedExtentScrollController(initialItem: _seconds);
+          _raceTimeTextController =
+              TextEditingController(text: state.pace.toStoper());
         }
         if (state is CalculatorController) {
-          _initValueInState(state);
+          _hours = state.timeRace.inHours;
+          _minutes = state.timeRace.inMinutes.remainder(60);
+          _seconds = state.timeRace.inSeconds.remainder(60);
+          _pickMinutesController =
+              FixedExtentScrollController(initialItem: _minutes);
+          _pickSecondsController =
+              FixedExtentScrollController(initialItem: _seconds);
+          _raceTimeTextController =
+              TextEditingController(text: state.timeRace.toStoper());
         }
       },
       child: TextField(
@@ -104,16 +120,6 @@ class _RaceTimeFieldState extends State<RaceTimeFieldState> {
         ),
       ),
     );
-  }
-
-  void _initValueInState(state) {
-    _hours = state.pace.inHours;
-    _minutes = state.pace.inMinutes.remainder(60);
-    _seconds = state.pace.inSeconds.remainder(60);
-    _pickMinutesController = FixedExtentScrollController(initialItem: _minutes);
-    _pickSecondsController = FixedExtentScrollController(initialItem: _seconds);
-    _raceTimeTextController =
-        TextEditingController(text: state.pace.toStoper());
   }
 
   Future<void> _raceTimeDialogPicker({required BuildContext context}) async {

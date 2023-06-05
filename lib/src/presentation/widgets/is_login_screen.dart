@@ -13,9 +13,7 @@ class IsLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthCubitState>(builder: (context, state) {
       if (state is IsLogInState) {
-        return MainScreen(
-          uid: state.userUrid,
-        );
+        return const MainScreen();
       }
       if (state is IsLogOutState) {
         return const LoginScreen();

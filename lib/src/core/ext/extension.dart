@@ -19,3 +19,17 @@ extension DurationParase on Duration {
     }
   }
 }
+
+extension Scale on double {
+  scaleToRange(
+      {required double targetScaleMin,
+      required double targetScaleMax,
+      required double inputScaleMin,
+      required double inputScaleMax,
+      required double input}) {
+    return (((targetScaleMax - targetScaleMin) *
+                ((input - inputScaleMin) / (inputScaleMax - inputScaleMin))) +
+            targetScaleMin) ??
+        0;
+  }
+}

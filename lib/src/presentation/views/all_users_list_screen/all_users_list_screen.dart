@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/core/ext/extension.dart';
 import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
+import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/widgets/avatar_circle_global_widget.dart';
 import 'package:new_app/src/presentation/widgets/vdot_circle_widget.dart';
 
@@ -14,7 +15,32 @@ class AllUserCalculatedListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AllUsersListCubit, AllUsersListState>(
         builder: (context, state) {
-      if (state is AllUsersListInitial) {
+      if (state is AllUsersListInitial || state is AllUsersListLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is AllUsersListLoaded) {
+        if (state.listToshow.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("You Don't any saved race, please calculate one."),
+                IconButton(
+                    onPressed: () {
+                      context
+                          .read<PageViewBootomNavigationCubit>()
+                          .pageViewIndex(0);
+                    },
+                    icon: const Icon(
+                      Icons.calculate_outlined,
+                      size: 100,
+                    )),
+              ],
+            ),
+          );
+        }
         var listOfcalulated = state.listToshow;
         return ListView.builder(
           itemCount: listOfcalulated.length,

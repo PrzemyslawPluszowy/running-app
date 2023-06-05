@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import '../../domain/entities/user_entity.dart';
 
@@ -11,8 +12,8 @@ abstract class RemoteDataSource {
 
   Future<void> logIn(String email, String password);
   Future<void> logOut();
-  Stream<String> isSign();
-  Stream<List<UserEntity>> getCurretUser(String uid);
+  Stream<User?> isSign();
+  Stream<List<UserEntity>> getCurretUser();
   Future<String> getCurrentUserUid();
   Future<String?> uploadAndGetUrlImage(File image);
   Future<void> saveCalculatedRace(CalcluateEntity calc);

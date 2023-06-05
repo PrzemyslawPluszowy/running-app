@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
+import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/calculator_screen.dart';
 import 'package:new_app/src/presentation/views/list_calculated_screen/list_calculated_screen.dart';
 import 'package:new_app/src/presentation/views/main_screan/widgets/custom_app_bar_widget.dart';
+import 'package:new_app/src/presentation/views/user_stats_screen/user_stats.dart';
 
 import '../../cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import '../all_users_list_screen/all_users_list_screen.dart';
 import 'widgets/custom_navigation_bar_widget.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key, required this.uid});
-  final String uid;
+  const MainScreen({
+    super.key,
+  });
+  // final String uid;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -23,8 +27,9 @@ class _MainScreenState extends State<MainScreen> {
   late PageController _pageController;
   @override
   void initState() {
-    context.read<UserCubit>().getCurretUser(widget.uid);
     _pageController = PageController();
+    context.read<UserCubit>().getCurretUser();
+
     super.initState();
   }
 
@@ -41,7 +46,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+    return BlocConsumer<UserCubit, UserState>(listener: (context, state) {
+      if (state is UserInitial || state is UserLoadingState) {
+        context.read<UserCubit>().getCurretUser();
+      }
+    }, builder: (context, state) {
       if (state is UserLoadingState) {
         return const Scaffold(
           body: SafeArea(
@@ -86,12 +95,22 @@ class _MainScreenState extends State<MainScreen> {
                       CalculatorScreen(
                         userData: loggedUser,
                       ),
-                      const Text('1'),
+                      UserStatsScreen(userData: loggedUser),
                       const AllUserCalculatedListScreen(),
                       ListCalutedCrean(
                         userData: loggedUser,
                       ),
-                      Text('4')
+                      Center(
+                          child: Column(
+                        children: [
+                          Text('4'),
+                          IconButton(
+                              onPressed: () {
+                                context.read<AuthCubit>().logout();
+                              },
+                              icon: Icon(Icons.logout))
+                        ],
+                      ))
                     ]),
               ),
             ),

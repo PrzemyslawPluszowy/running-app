@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CircleAvatarGlobalWidget extends StatelessWidget {
@@ -27,9 +28,15 @@ class CircleAvatarGlobalWidget extends StatelessWidget {
         child: Container(
           decoration:
               const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            foregroundImage: NetworkImage(imageUrl),
+          child: CachedNetworkImage(
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                CircularProgressIndicator(value: downloadProgress.progress),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+            imageUrl: imageUrl,
+            imageBuilder: (context, imageProvider) => CircleAvatar(
+              backgroundColor: Colors.white,
+              foregroundImage: imageProvider,
+            ),
           ),
         ),
       ),

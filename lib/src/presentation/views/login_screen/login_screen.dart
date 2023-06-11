@@ -94,7 +94,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: logIn,
                             icon: BlocBuilder<AuthCubit, AuthCubitState>(
                               builder: (context, state) {
-                                print(state);
                                 if (state is AuthCubitLoading) {
                                   return SizedBox(
                                       height: 50,

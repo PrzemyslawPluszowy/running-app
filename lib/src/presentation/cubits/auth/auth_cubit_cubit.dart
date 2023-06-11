@@ -23,7 +23,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
   final LogOutUserUsecase logOutUserUsecase;
   final GetCurretUserUidUsecase getCurretUserUidUsecase;
 
-  Stream<void> initApp() async* {
+  void initApp() async {
     isLogInUsecase.call().listen((event) {
       if (event != null) {
         emit(IsLogInState());
@@ -35,11 +35,8 @@ class AuthCubit extends Cubit<AuthCubitState> {
 
   Future<void> registerUser({required UserEntity user}) async {
     emit(AuthCubitLoading());
-    await Future.delayed(const Duration(seconds: 2), () {});
 
     try {
-      await Future.delayed(const Duration(seconds: 2), () {});
-
       await registerUserUsecase.call(user);
       emit(AuthCubiLoaded());
     } catch (e) {

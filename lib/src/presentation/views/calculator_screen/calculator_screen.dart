@@ -54,8 +54,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
-                DistanceFieldWidget(
-                    colorScheme: colorScheme, labelText: 'Distance'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: DistanceFieldWidget(
+                      colorScheme: colorScheme, labelText: 'Distance'),
+                ),
                 SizedBox(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -63,9 +66,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     children: [
                       Flexible(
                         flex: 5,
-                        child: RaceTimeFieldState(
-                          colorScheme: colorScheme,
-                          labelText: "Race Time",
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 35),
+                          child: RaceTimeFieldState(
+                            colorScheme: colorScheme,
+                            labelText: "Race Time",
+                          ),
                         ),
                       ),
                       state is CalcResultError
@@ -84,7 +90,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     ],
                   ),
                 ),
-                PaceTimeFieldState(colorScheme: colorScheme, labelText: 'pace'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: PaceTimeFieldState(
+                      colorScheme: colorScheme, labelText: 'pace'),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

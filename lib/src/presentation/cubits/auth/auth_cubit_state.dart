@@ -6,11 +6,20 @@ abstract class AuthCubitState extends Equatable {
   const AuthCubitState();
 }
 
-class AuthCubitInitial extends AuthCubitState {}
+class AuthCubitInitial extends AuthCubitState {
+  @override
+  List<Object?> get props => [];
+}
 
-class AuthCubitLoading extends AuthCubitState {}
+class AuthCubitLoading extends AuthCubitState {
+  @override
+  List<Object?> get props => [];
+}
 
-class AuthCubiLoaded extends AuthCubitState {}
+class AuthCubiLoaded extends AuthCubitState {
+  @override
+  List<Object?> get props => [];
+}
 
 class AuthCubitError extends AuthCubitState {
   final String error;
@@ -20,7 +29,10 @@ class AuthCubitError extends AuthCubitState {
   List<Object?> get props => [error];
 }
 
-class IsLogInState extends AuthCubitState {}
+class IsLogInState extends AuthCubitState {
+  @override
+  List<Object?> get props => [];
+}
 
 class IsLogOutState extends AuthCubitState {
   @override

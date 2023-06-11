@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
@@ -55,12 +54,10 @@ class _MainScreenState extends State<MainScreen> {
       }
     }, builder: (context, state) {
       if (state is UserLoadingState) {
-        return const Scaffold(
-          body: SafeArea(
-              child: Center(
-            child: CircularProgressIndicator(),
-          )),
-        );
+        return const SafeArea(
+            child: Center(
+          child: CircularProgressIndicator(),
+        ));
       }
       if (state is UserLoadedState) {
         return returnBody(state.loggedUser);

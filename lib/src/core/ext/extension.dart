@@ -33,3 +33,27 @@ extension Scale on double {
         0;
   }
 }
+
+extension AvgValue on List<int> {
+  double avgFromInt() {
+    if (this.isEmpty) {
+      return 0;
+    } else {
+      int sum = this.reduce((a, b) => a + b);
+      return sum / this.length;
+    }
+  }
+}
+
+extension ToPace on Duration {
+  Duration toPace(int distance) {
+    if (distance <= 0) {
+      return Duration(seconds: 0);
+    }
+    if (this.inSeconds <= 0) {
+      return Duration(seconds: 0);
+    } else {
+      return Duration(seconds: (this.inSeconds ~/ (distance / 1000)));
+    }
+  }
+}

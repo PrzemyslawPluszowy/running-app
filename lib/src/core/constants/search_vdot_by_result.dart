@@ -1,4 +1,4 @@
-List<Map<String, int>> estimatedRace = [
+List<Map<String, int>> vdotSearchTable = [
   {"vdot": 29, "5k": 1900, "10k": 3890, "hm": 8500, "m": 17500},
   {"vdot": 30, "5k": 1840, "10k": 3826, "hm": 8464, "m": 17357},
   {"vdot": 31, "5k": 1791, "10k": 3723, "hm": 8241, "m": 16917},

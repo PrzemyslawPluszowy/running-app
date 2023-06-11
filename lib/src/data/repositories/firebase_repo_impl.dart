@@ -68,4 +68,9 @@ class FirebaseRepoImpl implements FirebaseRepository {
   Stream<List<CalcluateEntity>> getAllUsersCalcList() {
     return remoteDataSource.getAllUserList();
   }
+
+  @override
+  Future<List<CalcluateEntity>> getCurrentUserCalcList() {
+    return remoteDataSource.getCurrentUserCalcList();
+  }
 }

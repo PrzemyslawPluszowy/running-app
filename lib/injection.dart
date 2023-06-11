@@ -2,17 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:new_app/src/data/datasources/get_vdto_traning_pace.dart';
+import 'package:new_app/src/data/datasources/get_vdto_traning_pace_impl.dart';
 import 'package:new_app/src/data/datasources/remote_data_source.dart';
 import 'package:new_app/src/data/datasources/remote_data_source_impl.dart';
 import 'package:new_app/src/data/repositories/firebase_repo_impl.dart';
+import 'package:new_app/src/data/repositories/vdot_traning_pace_impl.dart';
 import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 import 'package:new_app/src/data/repositories/calculator_repo_impl.dart';
 import 'package:new_app/src/domain/repositories/firebase_repository.dart';
+import 'package:new_app/src/domain/repositories/vdot_traning_pace.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/calcluate_race_time_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/calculate_pace_usecase.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/etimated_race_usecase.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/get_current_calc_list_one_usecase.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/get_hr_zone.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_llist_vdots.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_user_race_list.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/get_vdot_traning_pace.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user_uid.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/is_log_in_usecases.dart';
@@ -55,10 +63,20 @@ Future<void> init() async {
   getIt.registerFactory(() => AllUsersListCubit(
         getAllUsersCalcList: getIt.call(),
       ));
-  getIt
-      .registerFactory(() => UserStatsCubit(getListVdotsUsecase: getIt.call()));
+  getIt.registerFactory(() => UserStatsCubit(
+      getCurretUserUsecase: getIt.call(),
+      getVdtotTrainingPaceUsecase: getIt.call(),
+      getCurrentCalcListOneUsecase: getIt.call(),
+      getHrZoneUseCase: getIt.call(),
+      estimatedRaceTimeUseCase: getIt.call()));
 
   //register usecases
+  getIt.registerLazySingleton(() => EstimatedRaceTimeUseCase());
+  getIt.registerLazySingleton(() => GetHrZoneUseCase());
+  getIt.registerLazySingleton(
+      () => GetCurrentCalcListOneUsecase(firebaseRepository: getIt.call()));
+  getIt.registerLazySingleton(
+      () => GetVdtotTrainingPaceUsecase(vdotTraningPaceRepo: getIt.call()));
   getIt.registerLazySingleton(
       () => GetListVdotsUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(
@@ -90,6 +108,13 @@ Future<void> init() async {
   getIt.registerLazySingleton(
       () => GetCurretUserUsecase(firebaseRepository: getIt.call()));
   //register impl
+
+  getIt.registerLazySingleton<DbvDtotTraningPace>(
+    () => DbvDotTraningPaceImpl(),
+  );
+  getIt.registerLazySingleton<VdotTraningPaceRepo>(
+    () => VdotTraningPaceRepoImpl(dbvDotTraningPace: getIt.call()),
+  );
   getIt.registerLazySingleton<FirebaseRepository>(
       () => FirebaseRepoImpl(remoteDataSource: getIt.call()));
   getIt.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(

@@ -57,4 +57,14 @@ class CalcluateModel extends CalcluateEntity {
         'id': id,
         'avatarUrl': avatarUrl
       };
+
+  toEntity() => CalcluateEntity(
+      avatarUrl: avatarUrl,
+      userName: userName,
+      creatorUid: creatorUid,
+      distance: distance,
+      pace: Duration(seconds: paceInSecond),
+      timeRace: Duration(seconds: timeInSecond),
+      createdDate: dateCreated,
+      vdot: vdot);
 }

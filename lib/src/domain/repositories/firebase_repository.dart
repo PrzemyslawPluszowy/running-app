@@ -16,4 +16,5 @@ abstract class FirebaseRepository {
   Stream<List<CalcluateEntity>> getUserRaceList();
   Future<void> deleteUserSingleCalculation(String postId);
   getAllUsersCalcList();
+  Future<List<CalcluateEntity>> getCurrentUserCalcList();
 }

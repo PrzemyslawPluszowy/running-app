@@ -1,4 +1,4 @@
-import 'package:new_app/src/core/constants/estimated_race_result.dart';
+import 'package:new_app/src/core/constants/search_vdot_by_result.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/domain/repositories/calculator_repo.dart';
 
@@ -49,7 +49,7 @@ class RunningCalculatorImpl implements RunningCalulator {
 
   int searchVdot(CalcluateEntity calc, String distanceKey) {
     final List<int> timeTable =
-        (estimatedRace.map((e) => e[distanceKey]!).toList());
+        (vdotSearchTable.map((e) => e[distanceKey]!).toList());
 
     final closetTime = timeTable.reduce((a, b) =>
         (a - calc.timeRace.inSeconds).abs() <=
@@ -57,9 +57,9 @@ class RunningCalculatorImpl implements RunningCalulator {
             ? a
             : b);
 
-    int indexVdot = estimatedRace
+    int indexVdot = vdotSearchTable
         .indexWhere((element) => element[distanceKey] == closetTime);
-    final vdot = estimatedRace[indexVdot]['vdot'];
+    final vdot = vdotSearchTable[indexVdot]['vdot'];
     return vdot!;
   }
 }

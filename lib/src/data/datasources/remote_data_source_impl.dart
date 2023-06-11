@@ -231,4 +231,23 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       Fluttertoast.showToast(msg: e.toString());
     }
   }
+
+  @override
+  Future<List<CalcluateEntity>> getCurrentUserCalcList() async {
+    List<CalcluateEntity> list = [];
+    try {
+      var userUid = await getCurrentUserUid();
+
+      final ref = await firebaseFirestore
+          .collection('calculatedRace')
+          .where('creatorUid', isEqualTo: userUid)
+          .get()
+          .then((value) =>
+              value.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
+      list = ref;
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
+    return list;
+  }
 }

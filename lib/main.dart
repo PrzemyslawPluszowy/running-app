@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:new_app/src/presentation/cubits/UserStats/user_stats_cubit.dart';
 import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
@@ -51,7 +52,14 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: lightColorScheme,
+            textTheme: GoogleFonts.poppinsTextTheme(
+              Theme.of(context).textTheme,
+            ),
+            fontFamily: GoogleFonts.lato().fontFamily,
+          ),
           darkTheme:
               ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
           routerConfig: RouteConfig.returnRouter(true),

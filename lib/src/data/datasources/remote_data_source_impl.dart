@@ -209,7 +209,11 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Stream<List<CalcluateEntity>> getAllUserList() async* {
-    final ref = firebaseFirestore.collection('calculatedRace');
+    final ref = firebaseFirestore.collection('calculatedRace').orderBy(
+          'dateCreated',
+          descending: true,
+        );
+
     final list = ref.snapshots().map((event) =>
         event.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
     yield* list;
@@ -222,12 +226,18 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
       final ref = firebaseFirestore
           .collection('calculatedRace')
-          .where('creatorUid', isEqualTo: userUid);
+          .where(
+            'creatorUid',
+            isEqualTo: userUid,
+          )
+          .orderBy('dateCreated', descending: true);
+
       final list = ref.snapshots().map((calc) =>
           calc.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
 
       yield* list;
     } catch (e) {
+      print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
     }
   }

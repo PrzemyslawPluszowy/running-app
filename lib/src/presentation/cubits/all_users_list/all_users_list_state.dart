@@ -13,6 +13,8 @@ class AllUsersListLoaded extends AllUsersListState {
   final List<CalcluateEntity> listToshow;
 
   const AllUsersListLoaded({required this.listToshow});
+  @override
+  List<Object> get props => [listToshow];
 }
 
 class AllUsersListLoading extends AllUsersListState {}

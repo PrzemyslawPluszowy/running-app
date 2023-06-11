@@ -1,15 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:new_app/src/core/constants/vdot_estimated_race_by_vdot.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/domain/entities/vdot_pace_entity.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/etimated_race_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_current_calc_list_one_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_hr_zone.dart';
-
-import 'package:new_app/src/domain/usecases/user_stats_andlist/get_llist_vdots.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_vdot_traning_pace.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user.dart';
 

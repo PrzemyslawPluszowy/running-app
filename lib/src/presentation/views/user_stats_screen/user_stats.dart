@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/core/ext/extension.dart';
@@ -7,6 +8,13 @@ import 'package:new_app/src/presentation/widgets/avatar_circle_global_widget.dar
 
 import '../../widgets/circle_vdot_with_progres.dart';
 
+class VdotList {
+  final int index;
+  final int vdot;
+
+  VdotList({required this.index, required this.vdot});
+}
+
 class UserStatsScreen extends StatelessWidget {
   const UserStatsScreen({super.key, required this.userData});
   final UserEntity userData;
@@ -14,11 +22,16 @@ class UserStatsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserStatsCubit, UserStatsState>(
       builder: (context, state) {
-        print(state);
         if (state is UserStatsInitial) {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is UserStatsLoaded) {
+          List<VdotList> points = [
+            VdotList(index: 0, vdot: 31),
+            VdotList(index: 4, vdot: 30),
+            VdotList(index: 5, vdot: 34),
+            VdotList(index: 8, vdot: 35)
+          ];
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -53,121 +66,54 @@ class UserStatsScreen extends StatelessWidget {
                     height: 20,
                   ),
                   hrZoneCardWidget(state, context),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Estimated race times from: vdot ${state.vdot}',
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
-                          Table(
-                            children: [
-                              TableRow(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                  children: const [
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Distance',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('Time',
-                                          textAlign: TextAlign.right,
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('Pace',
-                                          textAlign: TextAlign.center,
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                    ),
+                  estimatedRaceTimeWidget(state, context),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 150,
+                    child: Stack(children: [
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: LineChart(
+                            curve: Curves.linear,
+                            LineChartData(
+                              titlesData: const FlTitlesData(
+                                show: false,
+                              ),
+                              borderData: FlBorderData(show: false),
+                              lineBarsData: [
+                                LineChartBarData(
+                                  gradient: LinearGradient(colors: [
+                                    Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.secondary
                                   ]),
-                              TableRow(children: [
-                                const Text('Marathon'),
-                                Text(
-                                  state.marathonTime.toStoper(),
-                                  textAlign: TextAlign.right,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  spots: points
+                                      .map((point) => FlSpot(
+                                          point.index.toDouble(),
+                                          point.vdot.toDouble()))
+                                      .toList(),
+                                  isCurved: true,
+                                  dotData: const FlDotData(
+                                    show: true,
+                                  ),
                                 ),
-                                Text(
-                                  state.marathonTime.toPace(42195).toStoper(),
-                                  textAlign: TextAlign.center,
-                                )
-                              ]),
-                              TableRow(children: [
-                                const Text('Half-Marathon'),
-                                Text(
-                                  state.halfMarathonTime.toStoper(),
-                                  textAlign: TextAlign.right,
-                                ),
-                                Text(
-                                  state.halfMarathonTime
-                                      .toPace(42195)
-                                      .toStoper(),
-                                  textAlign: TextAlign.center,
-                                )
-                              ]),
-                              TableRow(children: [
-                                const Text('15 km'),
-                                Text(state.m15km.toStoper(),
-                                    textAlign: TextAlign.right),
-                                Text(state.m15km.toPace(42195).toStoper(),
-                                    textAlign: TextAlign.center)
-                              ]),
-                              TableRow(children: [
-                                const Text('10 km'),
-                                Text(state.tenKmTime.toStoper(),
-                                    textAlign: TextAlign.right),
-                                Text(state.tenKmTime.toPace(10000).toStoper(),
-                                    textAlign: TextAlign.center)
-                              ]),
-                              TableRow(children: [
-                                const Text('5 km'),
-                                Text(state.fiveKmTime.toStoper(),
-                                    textAlign: TextAlign.right),
-                                Text(state.fiveKmTime.toPace(5000).toStoper(),
-                                    textAlign: TextAlign.center)
-                              ]),
-                              TableRow(children: [
-                                const Text('2 mile'),
-                                Text(
-                                  state.m3200.toStoper(),
-                                  textAlign: TextAlign.right,
-                                ),
-                                Text(state.m3200.toPace(3218).toStoper(),
-                                    textAlign: TextAlign.center)
-                              ]),
-                              TableRow(children: [
-                                const Text('1500 m'),
-                                Text(state.m1500.toStoper(),
-                                    textAlign: TextAlign.right),
-                                Text(state.m1500.toPace(1500).toStoper(),
-                                    textAlign: TextAlign.center)
-                              ]),
-                              TableRow(children: [
-                                const Text('1 mile'),
-                                Text(state.m1600.toStoper(),
-                                    textAlign: TextAlign.right),
-                                Text(state.m1600.toPace(1609).toStoper(),
-                                    textAlign: TextAlign.center)
-                              ]),
-                            ],
+                              ],
+                            ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  )
+                      Positioned(
+                        left: 10,
+                        top: 10,
+                        child: Container(
+                          width: 150,
+                          height: 150,
+                          child: const Text('Progress by vdot'),
+                        ),
+                      )
+                    ]),
+                  ),
                 ],
               ),
             ),
@@ -176,6 +122,190 @@ class UserStatsScreen extends StatelessWidget {
           return const Text('Loading');
         }
       },
+    );
+  }
+
+  Card estimatedRaceTimeWidget(UserStatsLoaded state, BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Estimated race times from: vdot ${state.vdot}',
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Table(
+                children: [
+                  TableRow(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: Theme.of(context).colorScheme.primary),
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Distance',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('Time',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('Pace',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ]),
+                  TableRow(children: [
+                    Text('Marathon',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(
+                      state.marathonTime.toStoper(),
+                      textAlign: TextAlign.right,
+                    ),
+                    Text(
+                      state.marathonTime.toPace(42195).toStoper(),
+                      textAlign: TextAlign.center,
+                    )
+                  ]),
+                  TableRow(children: [
+                    Text('Half-Marathon',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(
+                      state.halfMarathonTime.toStoper(),
+                      textAlign: TextAlign.right,
+                    ),
+                    Text(
+                      state.halfMarathonTime.toPace(42195).toStoper(),
+                      textAlign: TextAlign.center,
+                    )
+                  ]),
+                  TableRow(children: [
+                    Text('15 km',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(state.m15km.toStoper(), textAlign: TextAlign.right),
+                    Text(state.m15km.toPace(42195).toStoper(),
+                        textAlign: TextAlign.center)
+                  ]),
+                  TableRow(children: [
+                    Text('10 km',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(state.tenKmTime.toStoper(),
+                        textAlign: TextAlign.right),
+                    Text(state.tenKmTime.toPace(10000).toStoper(),
+                        textAlign: TextAlign.center)
+                  ]),
+                  TableRow(children: [
+                    Text('5 km',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(state.fiveKmTime.toStoper(),
+                        textAlign: TextAlign.right),
+                    Text(state.fiveKmTime.toPace(5000).toStoper(),
+                        textAlign: TextAlign.center)
+                  ]),
+                  TableRow(children: [
+                    Text('2 mile',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(
+                      state.m3200.toStoper(),
+                      textAlign: TextAlign.right,
+                    ),
+                    Text(state.m3200.toPace(3218).toStoper(),
+                        textAlign: TextAlign.center)
+                  ]),
+                  TableRow(children: [
+                    Text('1500 m',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(state.m1500.toStoper(), textAlign: TextAlign.right),
+                    Text(state.m1500.toPace(1500).toStoper(),
+                        textAlign: TextAlign.center)
+                  ]),
+                  TableRow(children: [
+                    Text('1 mile',
+                        style: Theme.of(context)
+                            .textTheme
+                            .copyWith(
+                                labelLarge: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor))
+                            .labelLarge),
+                    Text(state.m1600.toStoper(), textAlign: TextAlign.right),
+                    Text(state.m1600.toPace(1609).toStoper(),
+                        textAlign: TextAlign.center)
+                  ]),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

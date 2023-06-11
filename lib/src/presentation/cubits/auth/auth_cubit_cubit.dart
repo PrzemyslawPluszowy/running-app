@@ -23,7 +23,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
   final LogOutUserUsecase logOutUserUsecase;
   final GetCurretUserUidUsecase getCurretUserUidUsecase;
 
-  void initApp() async {
+  Stream<void> initApp() async* {
     isLogInUsecase.call().listen((event) {
       if (event != null) {
         emit(IsLogInState());

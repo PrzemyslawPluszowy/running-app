@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
@@ -10,6 +12,7 @@ import 'package:new_app/src/presentation/views/user_stats_screen/user_stats.dart
 
 import '../../cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import '../all_users_list_screen/all_users_list_screen.dart';
+import '../setting_screen/setting_screen.dart';
 import 'widgets/custom_navigation_bar_widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -100,17 +103,7 @@ class _MainScreenState extends State<MainScreen> {
                       ListCalutedCrean(
                         userData: loggedUser,
                       ),
-                      Center(
-                          child: Column(
-                        children: [
-                          Text('4'),
-                          IconButton(
-                              onPressed: () {
-                                context.read<AuthCubit>().logout();
-                              },
-                              icon: Icon(Icons.logout))
-                        ],
-                      ))
+                      const SettingScreen(),
                     ]),
               ),
             ),

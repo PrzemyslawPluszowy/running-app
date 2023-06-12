@@ -10,8 +10,7 @@ import 'auth_cubit_state.dart';
 
 class AuthCubit extends Cubit<AuthCubitState> {
   AuthCubit(
-      {required this.getCurretUserUidUsecase,
-      required this.logOutUserUsecase,
+      {required this.logOutUserUsecase,
       required this.isLogInUsecase,
       required this.logInUserUsecase,
       required this.registerUserUsecase})
@@ -21,7 +20,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
   final LogInUserUsecase logInUserUsecase;
   final IsLogInUsecase isLogInUsecase;
   final LogOutUserUsecase logOutUserUsecase;
-  final GetCurretUserUidUsecase getCurretUserUidUsecase;
+  // final GetCurretUserUidUsecase getCurretUserUidUsecase;
 
   void initApp() async {
     isLogInUsecase.call().listen((event) {

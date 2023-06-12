@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
-import 'package:new_app/src/presentation/cubits/auth/auth_cubit_state.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:new_app/src/core/constants/const_value.dart';
+import 'package:new_app/src/presentation/cubits/setting_page/setting_cubit.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../widgets/avatar_image.dart';
@@ -17,8 +17,8 @@ import '../../widgets/custom_text_field.dart';
 enum PICKER { age, height, weight, hrmax, hrrest }
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
-
+  const SettingScreen({super.key, required this.user});
+  final UserEntity user;
   @override
   State<SettingScreen> createState() => _SettingScreenState();
 }
@@ -46,6 +46,13 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   void initState() {
+    _nameController.text = widget.user.userName!;
+    _ageController.text = widget.user.age.toString();
+    _heightController.text = widget.user.height.toString();
+    _weightController.text = widget.user.weight.toString();
+    _hrRestController.text = widget.user.hrRest.toString();
+    _hrMaxController.text = widget.user.hrMax.toString();
+
     getImageFileFromAssets().then((value) async {
       setState(() {
         _imageAvatar = value;
@@ -98,7 +105,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         onPressed: () {
                           context.read<AuthCubit>().logout();
                         },
-                        icon: Icon(Icons.logout,
+                        icon: const Icon(Icons.logout,
                             color: Color(0xffF2F2F2), size: 30)),
                   ),
                 )
@@ -263,7 +270,12 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                 )
               ],
-            )
+            ),
+            OutlinedButton(
+                onPressed: () {
+                  submitFieldButton();
+                },
+                child: const Text('Save new value'))
           ],
         ),
       ),
@@ -271,7 +283,18 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void submitFieldButton() async {
-    UserEntity newUser = UserEntity(
+    num? bmi;
+    if (_weight != null && _height != null) {
+      bmi = (_weight! / ((_height! / 100) * (_height! / 100))).round();
+    } else if (_weight != null) {
+      bmi = (_weight! /
+              ((widget.user.height! / 100) * (widget.user.height! / 100)))
+          .round();
+    } else {
+      bmi = null;
+    }
+    UserEntity updateUserValue = UserEntity(
+      uid: widget.user.uid,
       age: _age,
       weight: _weight,
       height: _height,
@@ -279,8 +302,9 @@ class _SettingScreenState extends State<SettingScreen> {
       hrRest: _hrmin,
       userName: _nameController.text,
       imagefile: _imageAvatar,
+      bmi: bmi,
     );
-    context.read<AuthCubit>().registerUser(user: newUser);
+    context.read<SettingCubit>().updateUserField(updateUserValue);
   }
 
   Future<void> _dialogPickerBulider(
@@ -309,7 +333,7 @@ class _SettingScreenState extends State<SettingScreen> {
               child: CupertinoPicker(
                   magnification: 1.22,
                   squeeze: 1.2,
-                  useMagnifier: true,
+                  useMagnifier: false,
                   itemExtent: 50,
                   onSelectedItemChanged: (value) {
                     setState(() {
@@ -373,7 +397,8 @@ class _SettingScreenState extends State<SettingScreen> {
 
   Future<void> pickImage({required ImageSource source}) async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: source);
+    final XFile? image = await picker.pickImage(
+        source: source, imageQuality: 5, maxWidth: 500, maxHeight: 500);
     if (image != null) {
       setState(() {
         _imageAvatar = File(image.path);

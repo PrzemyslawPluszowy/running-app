@@ -30,12 +30,14 @@ import 'package:new_app/src/domain/usecases/user_usecase/log_in_usecases.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/log_out_usecases.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/register_user_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/save_calculated_race.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/update_user_usecase.dart';
 import 'package:new_app/src/presentation/cubits/UserStats/user_stats_cubit.dart';
 import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
 import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
 import 'package:new_app/src/presentation/cubits/list_race_calulated/list_race_calculated_cubit.dart';
+import 'package:new_app/src/presentation/cubits/setting_page/setting_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
 
 final getIt = GetIt.instance;
@@ -43,11 +45,11 @@ final getIt = GetIt.instance;
 Future<void> init() async {
   // register cubit
   getIt.registerFactory(() => AuthCubit(
-      registerUserUsecase: getIt.call(),
-      logInUserUsecase: getIt.call(),
-      isLogInUsecase: getIt.call(),
-      logOutUserUsecase: getIt.call(),
-      getCurretUserUidUsecase: getIt.call()));
+        registerUserUsecase: getIt.call(),
+        logInUserUsecase: getIt.call(),
+        isLogInUsecase: getIt.call(),
+        logOutUserUsecase: getIt.call(),
+      ));
 
   getIt.registerFactory(() => UserCubit(getCurretUserUsecase: getIt.call()));
   getIt.registerFactory(() => PageViewBootomNavigationCubit());
@@ -70,7 +72,11 @@ Future<void> init() async {
       getHrZoneUseCase: getIt.call(),
       estimatedRaceTimeUseCase: getIt.call()));
 
+  getIt.registerFactory(() => SettingCubit(updateUserUseCase: getIt.call()));
+
   //register usecases
+  getIt.registerLazySingleton(
+      () => UpdateUserUseCase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(() => EstimatedRaceTimeUseCase());
   getIt.registerLazySingleton(() => GetHrZoneUseCase());
   getIt.registerLazySingleton(
@@ -103,8 +109,8 @@ Future<void> init() async {
       () => LogOutUserUsecase(fireRepository: getIt.call()));
   getIt.registerLazySingleton(
       () => LogInUserUsecase(fireRepository: getIt.call()));
-  getIt.registerLazySingleton(
-      () => GetCurretUserUidUsecase(firebaseRepository: getIt.call()));
+  // getIt.registerLazySingleton(
+  //     () => GetCurretUserUidUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(
       () => GetCurretUserUsecase(firebaseRepository: getIt.call()));
   //register impl

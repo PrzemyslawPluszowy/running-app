@@ -8,6 +8,7 @@ import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
 import 'package:new_app/src/presentation/cubits/list_race_calulated/list_race_calculated_cubit.dart';
+import 'package:new_app/src/presentation/cubits/setting_page/setting_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
 import 'package:new_app/src/core/routing/routing.dart';
 
@@ -48,6 +49,9 @@ class MyApp extends StatelessWidget {
                   di.getIt<AllUsersListCubit>()..showAllUserCalcList()),
           BlocProvider(
             create: (context) => di.getIt<UserStatsCubit>()..showUserStats(),
+          ),
+          BlocProvider(
+            create: (context) => di.getIt<SettingCubit>(),
           )
         ],
         child: MaterialApp.router(

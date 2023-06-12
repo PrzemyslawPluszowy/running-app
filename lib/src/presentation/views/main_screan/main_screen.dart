@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
-import 'package:new_app/src/presentation/cubits/auth/auth_cubit_cubit.dart';
 import 'package:new_app/src/presentation/cubits/user/user_cubit.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/calculator_screen.dart';
 import 'package:new_app/src/presentation/views/list_calculated_screen/list_calculated_screen.dart';
@@ -100,7 +98,9 @@ class _MainScreenState extends State<MainScreen> {
                       ListCalutedCrean(
                         userData: loggedUser,
                       ),
-                      const SettingScreen(),
+                      SettingScreen(
+                        user: loggedUser,
+                      ),
                     ]),
               ),
             ),

@@ -209,10 +209,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Stream<List<CalcluateEntity>> getAllUserList() async* {
-    final ref = firebaseFirestore.collection('calculatedRace').orderBy(
+    final ref = firebaseFirestore
+        .collection('calculatedRace')
+        .orderBy(
           'dateCreated',
           descending: true,
-        );
+        )
+        .limit(15);
 
     final list = ref.snapshots().map((event) =>
         event.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
@@ -230,14 +233,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
             'creatorUid',
             isEqualTo: userUid,
           )
-          .orderBy('dateCreated', descending: true);
+          .orderBy('dateCreated', descending: true)
+          .limit(15);
 
       final list = ref.snapshots().map((calc) =>
           calc.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
 
       yield* list;
     } catch (e) {
-      print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
     }
   }
@@ -259,5 +262,45 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       Fluttertoast.showToast(msg: e.toString());
     }
     return list;
+  }
+
+  @override
+  Future<void> updateUserFields(UserEntity user) async {
+    Map<String, dynamic> userData = Map();
+    if (user.age != null && user.age != 0) {
+      userData['age'] = user.age;
+    }
+    if (user.weight != null && user.weight != 0) {
+      userData['weight'] = user.weight;
+    }
+    if (user.height != null && user.height != 0) {
+      userData['height'] = user.height;
+    }
+    if (user.userName != null && user.userName != '') {
+      userData['userName'] = user.userName;
+    }
+    if (user.imagefile != null) {
+      String? imageUrl = await uploadAndGetUrlImage(user.imagefile!);
+      userData['urlImageAvatar'] = imageUrl;
+    }
+    if (user.hrMax != null && user.hrMax != 0) {
+      userData['hrMax'] = user.hrMax;
+    }
+    if (user.hrRest != null && user.hrRest != 0) {
+      userData['hrRest'] = user.hrRest;
+    }
+    if (user.bmi != null && user.bmi != 0) {
+      userData['bmi'] = user.bmi;
+    }
+    try {
+      await firebaseFirestore
+          .collection('users')
+          .doc(user.uid)
+          .update(userData);
+    } on FirebaseException catch (e) {
+      Fluttertoast.showToast(msg: e.code);
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 }

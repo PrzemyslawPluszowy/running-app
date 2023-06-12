@@ -9,7 +9,7 @@ abstract class FirebaseRepository {
   Future<void> logOut();
   Stream<User?> isSign();
   Stream<List<UserEntity>> getCurretUser();
-  Future<String> getCurrentUserUid();
+  // Future<String> getCurrentUserUid();
   Future<void> registerUserAddFields(
       UserEntity user, String uid, String imageUrl);
   Future<void> saveCalculatedRace(CalcluateEntity calc);
@@ -17,4 +17,5 @@ abstract class FirebaseRepository {
   Future<void> deleteUserSingleCalculation(String postId);
   getAllUsersCalcList();
   Future<List<CalcluateEntity>> getCurrentUserCalcList();
+  Future<void> updateUserFields(UserEntity user);
 }

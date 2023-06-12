@@ -53,6 +53,7 @@ dependencies:
   path_provider: ^2.0.15
   google_fonts: ^4.0.4
   fl_chart: ^0.63.0
+  flutter_image_compress: ^2.0.3
 
 dev_dependencies:
   flutter_test:

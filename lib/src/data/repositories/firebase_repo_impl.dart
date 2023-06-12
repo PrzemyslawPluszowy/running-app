@@ -58,11 +58,11 @@ class FirebaseRepoImpl implements FirebaseRepository {
     return remoteDataSource.deleteUserSingleCalculation(postId);
   }
 
-  @override
-  Future<String> getCurrentUserUid() {
-    // TODO: implement getCurrentUserUid
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<String> getCurrentUserUid() {
+  //   // TODO: implement getCurrentUserUid
+  //   throw UnimplementedError();
+  // }
 
   @override
   Stream<List<CalcluateEntity>> getAllUsersCalcList() {
@@ -72,5 +72,16 @@ class FirebaseRepoImpl implements FirebaseRepository {
   @override
   Future<List<CalcluateEntity>> getCurrentUserCalcList() {
     return remoteDataSource.getCurrentUserCalcList();
+  }
+
+  @override
+  Future<void> updateUserFields(UserEntity user) {
+    return remoteDataSource.updateUserFields(user);
+  }
+
+  @override
+  Future<String> getCurrentUserUid() {
+    // TODO: implement getCurrentUserUid
+    throw UnimplementedError();
   }
 }

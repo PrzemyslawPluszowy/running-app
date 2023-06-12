@@ -21,4 +21,5 @@ abstract class RemoteDataSource {
   Future<void> deleteUserSingleCalculation(String postId);
   Stream<List<CalcluateEntity>> getAllUserList();
   Future<List<CalcluateEntity>> getCurrentUserCalcList();
+  Future<void> updateUserFields(UserEntity user);
 }

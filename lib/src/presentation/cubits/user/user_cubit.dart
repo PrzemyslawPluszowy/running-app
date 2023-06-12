@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user.dart';

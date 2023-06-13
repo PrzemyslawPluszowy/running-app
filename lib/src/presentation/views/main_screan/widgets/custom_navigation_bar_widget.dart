@@ -16,7 +16,7 @@ class CustomNavigationBar extends StatelessWidget {
     Key? key,
     required this.changePage,
   }) : super(key: key);
-  final changePage;
+  final Function changePage;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(

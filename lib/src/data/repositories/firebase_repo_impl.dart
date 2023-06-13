@@ -77,4 +77,9 @@ class FirebaseRepoImpl implements FirebaseRepository {
   Future<String> forgotPassword(String email) {
     return remoteDataSource.forgotPassword(email);
   }
+
+  @override
+  Future<List<CalcluateEntity>> fetchNextPage() {
+    return remoteDataSource.fetchNextPage();
+  }
 }

@@ -1,27 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbols.dart';
 import 'package:new_app/src/core/ext/extension.dart';
 import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 import 'package:new_app/src/presentation/widgets/avatar_circle_global_widget.dart';
 import 'package:new_app/src/presentation/widgets/vdot_circle_widget.dart';
 
-class AllUserCalculatedListScreen extends StatelessWidget {
+class AllUserCalculatedListScreen extends StatefulWidget {
   const AllUserCalculatedListScreen({
     super.key,
   });
 
   @override
+  State<AllUserCalculatedListScreen> createState() =>
+      _AllUserCalculatedListScreenState();
+}
+
+class _AllUserCalculatedListScreenState
+    extends State<AllUserCalculatedListScreen> {
+  late ScrollController _scrollController;
+  bool _isLoading = false;
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<AllUsersListCubit, AllUsersListState>(
         builder: (context, state) {
-      if (state is AllUsersListInitial || state is AllUsersListLoading) {
+      _scrollController.addListener(() {
+        if (_scrollController.position.maxScrollExtent ==
+            _scrollController.offset) {
+          context.read<AllUsersListCubit>().fetchNextPage();
+        }
+      });
+      if (state is AllUsersListLoading) {
         return const Center(
           child: CircularProgressIndicator(),
         );
       }
-      if (state is AllUsersListLoaded) {
-        if (state.listToshow.isEmpty) {
+      if (state is AllUsersListState) {
+        if (state.listToshow!.isEmpty) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -42,97 +64,125 @@ class AllUserCalculatedListScreen extends StatelessWidget {
           );
         }
         var listOfcalulated = state.listToshow;
-        return ListView.builder(
-          itemCount: listOfcalulated.length,
-          itemBuilder: (context, index) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 5, right: 5, bottom: 7),
-                child: Stack(children: [
-                  Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              width: 90,
-                            ),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: listOfcalulated!.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == listOfcalulated.length &&
+                      state.isLoading &&
+                      !state.isEndOfList) {
+                    return Center(
+                        child: Container(
+                            margin: const EdgeInsets.only(bottom: 50),
+                            width: 50,
+                            height: 50,
+                            child: const CircularProgressIndicator()));
+                  } else if (index == listOfcalulated.length &&
+                      !state.isLoading &&
+                      !state.isEndOfList) {
+                    return const SizedBox(
+                      height: 50,
+                    );
+                  } else if (state.isEndOfList &&
+                      index == listOfcalulated.length) {
+                    return const Center(child: Text('End of List'));
+                  }
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 5, right: 5, bottom: 7),
+                      child: Stack(children: [
+                        Center(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Card(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  FittedBox(
-                                      child: _richText(
-                                          context: context,
-                                          index: index,
-                                          label: 'Name: ',
-                                          text: listOfcalulated[index]
-                                              .userName!)),
-                                  FittedBox(
-                                      child: _richText(
-                                          context: context,
-                                          index: index,
-                                          label: 'Date: ',
-                                          text: listOfcalulated[index]
-                                              .createdDate!
-                                              .dateToString())),
-                                  FittedBox(
-                                      child: _richText(
-                                          context: context,
-                                          index: index,
-                                          label: 'Distance: ',
-                                          text:
-                                              '${listOfcalulated[index].distance / 1000} km')),
-                                  FittedBox(
-                                      child: _richText(
-                                          context: context,
-                                          index: index,
-                                          label: 'Pace: ',
-                                          text:
-                                              '${listOfcalulated[index].pace.toStoper()} min/km')),
-                                  FittedBox(
-                                      child: _richText(
-                                          context: context,
-                                          index: index,
-                                          label: 'Time Race: ',
-                                          text: listOfcalulated[index]
-                                              .timeRace
-                                              .toStoper())),
+                                  const SizedBox(
+                                    width: 90,
+                                  ),
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        FittedBox(
+                                            child: _richText(
+                                                context: context,
+                                                index: index,
+                                                label: 'Name: ',
+                                                text: listOfcalulated[index]
+                                                    .userName!)),
+                                        FittedBox(
+                                            child: _richText(
+                                                context: context,
+                                                index: index,
+                                                label: 'Date: ',
+                                                text: listOfcalulated[index]
+                                                    .createdDate!
+                                                    .dateToString())),
+                                        FittedBox(
+                                            child: _richText(
+                                                context: context,
+                                                index: index,
+                                                label: 'Distance: ',
+                                                text:
+                                                    '${listOfcalulated[index].distance / 1000} km')),
+                                        FittedBox(
+                                            child: _richText(
+                                                context: context,
+                                                index: index,
+                                                label: 'Pace: ',
+                                                text:
+                                                    '${listOfcalulated[index].pace.toStoper()} min/km')),
+                                        FittedBox(
+                                            child: _richText(
+                                                context: context,
+                                                index: index,
+                                                label: 'Time Race: ',
+                                                text: listOfcalulated[index]
+                                                    .timeRace
+                                                    .toStoper())),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        Positioned(
+                          left: 60,
+                          top: 0,
+                          bottom: 0,
+                          child: SizedBox(
+                              width: 90,
+                              height: 90,
+                              child: VdotVircleWidget(
+                                  vdot: listOfcalulated[index].vdot)),
+                        ),
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          bottom: 0,
+                          child: SizedBox(
+                              width: 90,
+                              height: 90,
+                              child: CircleAvatarGlobalWidget(
+                                  imageUrl: listOfcalulated[index].avatarUrl!)),
+                        ),
+                      ]),
                     ),
-                  ),
-                  Positioned(
-                    left: 60,
-                    top: 0,
-                    bottom: 0,
-                    child: SizedBox(
-                        width: 90,
-                        height: 90,
-                        child: VdotVircleWidget(
-                            vdot: listOfcalulated[index].vdot)),
-                  ),
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: SizedBox(
-                        width: 90,
-                        height: 90,
-                        child: CircleAvatarGlobalWidget(
-                            imageUrl: listOfcalulated[index].avatarUrl!)),
-                  ),
-                ]),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ],
         );
       }
 

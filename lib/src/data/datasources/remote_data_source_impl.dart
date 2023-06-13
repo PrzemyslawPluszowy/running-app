@@ -212,19 +212,54 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     }
   }
 
+  late DocumentSnapshot lastDocument;
+  bool firstFetch = true;
   @override
   Stream<List<CalcluateEntity>> getAllUserList() async* {
-    final ref = firebaseFirestore
+    final first = firebaseFirestore
         .collection('calculatedRace')
         .orderBy(
           'dateCreated',
           descending: true,
         )
-        .limit(15);
+        .limit(6);
 
-    final list = ref.snapshots().map((event) =>
-        event.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList());
+    await first.get().then((value) => lastDocument = value.docs.last);
+
+    final list =
+        first.startAfterDocument(lastDocument).snapshots().map((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        lastDocument = snapshot.docs.last;
+      }
+
+      return snapshot.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList();
+    });
     yield* list;
+  }
+
+  @override
+  Future<List<CalcluateEntity>> fetchNextPage() async {
+    if (firstFetch) {
+      final snapshot = await firebaseFirestore
+          .collection('calculatedRace')
+          .orderBy('dateCreated', descending: true)
+          .limit(6)
+          .get();
+
+      lastDocument = snapshot.docs.last;
+      firstFetch = false;
+    }
+    final snapshot = await firebaseFirestore
+        .collection('calculatedRace')
+        .orderBy('dateCreated', descending: true)
+        .startAfterDocument(lastDocument)
+        .limit(6)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      lastDocument = snapshot.docs.last;
+    }
+    return snapshot.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList();
   }
 
   @override
@@ -316,10 +351,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       await firebaseAuth.sendPasswordResetEmail(email: email);
       res = 'success';
     } on FirebaseException catch (e) {
-      // Fluttertoast.showToast(msg: e.code);
       res = e.code;
     } catch (e) {
-      // Fluttertoast.showToast(msg: e.toString());
       res = e.toString();
     }
     return res;

@@ -15,6 +15,7 @@ import 'package:new_app/src/domain/repositories/vdot_traning_pace.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/calcluate_race_time_usecase.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/calculate_pace_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/etimated_race_usecase.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/fetch_paginateted_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_current_calc_list_one_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_hr_zone.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_llist_vdots.dart';
@@ -65,6 +66,7 @@ Future<void> init() async {
       deleteSingleUserCalculatedUseCase: getIt.call()));
   getIt.registerFactory(() => AllUsersListCubit(
         getAllUsersCalcList: getIt.call(),
+        fetchPaginatedUsecase: getIt.call(),
       ));
   getIt.registerFactory(() => UserStatsCubit(
       getCurretUserUsecase: getIt.call(),
@@ -76,6 +78,8 @@ Future<void> init() async {
   getIt.registerFactory(() => SettingCubit(updateUserUseCase: getIt.call()));
 
   //register usecases
+  getIt.registerLazySingleton(
+      () => FetchPaginatedUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(() => ForgotPasswordUseCase(
         firebaseRepository: getIt.call(),
       ));

@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
                   di.getIt<ListRaceCalculatedCubit>()..showCurretRaceList()),
           BlocProvider(
               create: (context) =>
-                  di.getIt<AllUsersListCubit>()..showAllUserCalcList()),
+                  di.getIt<AllUsersListCubit>()..fetchNextPage()),
           BlocProvider(
             create: (context) => di.getIt<UserStatsCubit>()..showUserStats(),
           ),

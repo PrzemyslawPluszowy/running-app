@@ -23,4 +23,5 @@ abstract class RemoteDataSource {
   Future<List<CalcluateEntity>> getCurrentUserCalcList();
   Future<void> updateUserFields(UserEntity user);
   Future<String> forgotPassword(String email);
+  Future<List<CalcluateEntity>> fetchNextPage();
 }

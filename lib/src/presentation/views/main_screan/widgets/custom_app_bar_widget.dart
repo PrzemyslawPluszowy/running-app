@@ -4,7 +4,8 @@ import '../../../../domain/entities/user_entity.dart';
 import '../../../widgets/avatar_circle_global_widget.dart';
 import '../../../widgets/vdot_circle_widget.dart';
 
-Container customAppBar(UserEntity loggedUser, BuildContext context) {
+Container customAppBar(UserEntity loggedUser, BuildContext context,
+    {required UserEntity user}) {
   return Container(
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.primaryContainer,

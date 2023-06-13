@@ -1,7 +1,5 @@
 import 'package:new_app/src/data/datasources/get_vdto_traning_pace.dart';
-import 'package:new_app/src/data/datasources/get_vdto_traning_pace_impl.dart';
-import 'package:new_app/src/data/models/traning_pace_vdot.model.dart';
-import 'package:new_app/src/domain/entities/user_entity.dart';
+
 import 'package:new_app/src/domain/entities/vdot_pace_entity.dart';
 
 import '../../domain/repositories/vdot_traning_pace.dart';

@@ -75,6 +75,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         label: 'Enter your password',
                       ),
                     ),
+                    BlocBuilder<AuthCubit, AuthCubitState>(
+                      builder: (context, state) {
+                        if (state is AuthCubitForgotPass) {
+                          return Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                context.read<AuthCubit>().forgotPassword(
+                                    email: _emailController.text);
+                              },
+                              child: errText(
+                                  'Forgot password?', 'Click hto reset '),
+                            ),
+                          );
+                        }
+                        if (state is AuthCubitErrForgetPass) {
+                          return errText('Error', 'Check your email');
+                        }
+                        if (state is SendEmailSuccess) {
+                          return errText('Success', 'We send you email');
+                        }
+                        return const SizedBox();
+                      },
+                    ),
                     const Spacer(),
                     Center(
                       child: SizedBox(
@@ -130,6 +153,17 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  RichText errText(String firstText, String secondText) {
+    return RichText(
+        text: TextSpan(
+      text: firstText,
+      children: [
+        TextSpan(
+            text: secondText, style: TextStyle(fontWeight: FontWeight.bold))
+      ],
+    ));
   }
 
   void logIn() {

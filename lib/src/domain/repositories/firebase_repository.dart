@@ -5,11 +5,11 @@ import '../entities/calcuate_entity.dart';
 
 abstract class FirebaseRepository {
   Future<void> registerUser(UserEntity user);
-  Future<void> logIn(String email, String password);
+  Future<String> logIn(String email, String password);
   Future<void> logOut();
   Stream<User?> isSign();
   Stream<List<UserEntity>> getCurretUser();
-  // Future<String> getCurrentUserUid();
+
   Future<void> registerUserAddFields(
       UserEntity user, String uid, String imageUrl);
   Future<void> saveCalculatedRace(CalcluateEntity calc);
@@ -18,4 +18,5 @@ abstract class FirebaseRepository {
   getAllUsersCalcList();
   Future<List<CalcluateEntity>> getCurrentUserCalcList();
   Future<void> updateUserFields(UserEntity user);
+  Future<String> forgotPassword(String email);
 }

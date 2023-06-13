@@ -27,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   late PageController _pageController;
   @override
   void initState() {
-    _pageController = PageController();
+    _pageController = PageController(keepPage: true);
     context.read<UserCubit>().getCurretUser();
 
     super.initState();
@@ -40,8 +40,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void changePage(int index) {
-    _pageController.animateToPage(index,
-        curve: Curves.easeIn, duration: const Duration(milliseconds: 500));
+    _pageController.animateToPage(
+      index,
+      curve: Curves.easeIn,
+      duration: const Duration(milliseconds: 200),
+    );
   }
 
   @override
@@ -69,44 +72,48 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget returnBody(UserEntity loggedUser) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      bottomNavigationBar: const CustomNavigationBar(),
-      body: Column(
-        children: [
-          customAppBar(loggedUser, context),
-          BlocListener<PageViewBootomNavigationCubit,
-              PageViewBootomNavigationState>(
-            listener: (context, state) {
-              if (state is PageViewIndex) {
-                changePage(state.index);
-              }
-            },
-            child: Expanded(
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        bottomNavigationBar: CustomNavigationBar(
+          changePage: changePage,
+        ),
+        body: Column(
+          children: [
+            customAppBar(loggedUser, context, user: loggedUser),
+            Expanded(
               child: Container(
                 color: Theme.of(context).colorScheme.primaryContainer,
                 height: MediaQuery.of(context).size.height * 0.7,
                 width: MediaQuery.of(context).size.width,
-                child: PageView(
-                    allowImplicitScrolling: true,
-                    controller: _pageController,
-                    children: [
-                      CalculatorScreen(
-                        userData: loggedUser,
-                      ),
-                      UserStatsScreen(userData: loggedUser),
-                      const AllUserCalculatedListScreen(),
-                      ListCalutedCrean(
-                        userData: loggedUser,
-                      ),
-                      SettingScreen(
-                        user: loggedUser,
-                      ),
-                    ]),
+                child:
+                    BlocConsumer<PageViewBootomNavigationCubit, PageViewIndex>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return PageView(
+                        onPageChanged: (value) {
+                          context
+                              .read<PageViewBootomNavigationCubit>()
+                              .pageViewIndex(value);
+                        },
+                        allowImplicitScrolling: true,
+                        controller: _pageController,
+                        children: [
+                          CalculatorScreen(
+                            userData: loggedUser,
+                          ),
+                          UserStatsScreen(userData: loggedUser),
+                          const AllUserCalculatedListScreen(),
+                          ListCalutedCrean(
+                            userData: loggedUser,
+                          ),
+                          SettingScreen(
+                            user: loggedUser,
+                          ),
+                        ]);
+                  },
+                ),
               ),
             ),
-          )
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }

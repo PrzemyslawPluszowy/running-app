@@ -39,7 +39,7 @@ class FirebaseRepoImpl implements FirebaseRepository {
   }
 
   @override
-  Future<void> logIn(String email, String password) {
+  Future<String> logIn(String email, String password) {
     return remoteDataSource.logIn(email, password);
   }
 
@@ -58,12 +58,6 @@ class FirebaseRepoImpl implements FirebaseRepository {
     return remoteDataSource.deleteUserSingleCalculation(postId);
   }
 
-  // @override
-  // Future<String> getCurrentUserUid() {
-  //   // TODO: implement getCurrentUserUid
-  //   throw UnimplementedError();
-  // }
-
   @override
   Stream<List<CalcluateEntity>> getAllUsersCalcList() {
     return remoteDataSource.getAllUserList();
@@ -80,8 +74,7 @@ class FirebaseRepoImpl implements FirebaseRepository {
   }
 
   @override
-  Future<String> getCurrentUserUid() {
-    // TODO: implement getCurrentUserUid
-    throw UnimplementedError();
+  Future<String> forgotPassword(String email) {
+    return remoteDataSource.forgotPassword(email);
   }
 }

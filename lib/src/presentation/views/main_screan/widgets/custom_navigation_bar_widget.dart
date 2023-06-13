@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
 
 List<BottomNavigationBarItem> listNavigationBar = const [
@@ -12,36 +13,33 @@ List<BottomNavigationBarItem> listNavigationBar = const [
 
 class CustomNavigationBar extends StatelessWidget {
   const CustomNavigationBar({
-    super.key,
-  });
-
+    Key? key,
+    required this.changePage,
+  }) : super(key: key);
+  final changePage;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(15), topRight: Radius.circular(20)),
-        child: BlocConsumer<PageViewBootomNavigationCubit,
-            PageViewBootomNavigationState>(
-          listener: (context, state) {},
+        child: BlocBuilder<PageViewBootomNavigationCubit, PageViewIndex>(
           builder: (context, state) {
-            if (state is PageViewIndex) {
-              return BottomNavigationBar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: state.index,
-                  onTap: (index) {
-                    BlocProvider.of<PageViewBootomNavigationCubit>(context)
-                        .pageViewIndex(index);
-                  },
-                  elevation: 2,
-                  iconSize: 35,
-                  unselectedItemColor:
-                      Theme.of(context).colorScheme.outlineVariant,
-                  selectedItemColor: Theme.of(context).colorScheme.onPrimary,
-                  items: listNavigationBar);
-            } else {
-              return const SizedBox();
-            }
+            return BottomNavigationBar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                type: BottomNavigationBarType.fixed,
+                currentIndex: state.index,
+                onTap: (index) {
+                  changePage(index);
+                  context
+                      .read<PageViewBootomNavigationCubit>()
+                      .pageViewIndex(index);
+                },
+                elevation: 2,
+                iconSize: 35,
+                unselectedItemColor:
+                    Theme.of(context).colorScheme.outlineVariant,
+                selectedItemColor: Theme.of(context).colorScheme.onPrimary,
+                items: listNavigationBar);
           },
         ));
   }

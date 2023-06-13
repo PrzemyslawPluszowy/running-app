@@ -10,7 +10,7 @@ abstract class RemoteDataSource {
     String uid,
   );
 
-  Future<void> logIn(String email, String password);
+  Future<String> logIn(String email, String password);
   Future<void> logOut();
   Stream<User?> isSign();
   Stream<List<UserEntity>> getCurretUser();
@@ -22,4 +22,5 @@ abstract class RemoteDataSource {
   Stream<List<CalcluateEntity>> getAllUserList();
   Future<List<CalcluateEntity>> getCurrentUserCalcList();
   Future<void> updateUserFields(UserEntity user);
+  Future<String> forgotPassword(String email);
 }

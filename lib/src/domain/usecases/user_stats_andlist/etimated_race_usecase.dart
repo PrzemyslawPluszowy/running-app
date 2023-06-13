@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:new_app/src/core/constants/vdot_estimated_race_by_vdot.dart';
 
 class EstimatedRaceTimeUseCase {

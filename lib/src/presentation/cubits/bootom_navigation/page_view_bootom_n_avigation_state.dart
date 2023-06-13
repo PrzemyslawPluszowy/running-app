@@ -1,11 +1,8 @@
 part of 'page_view_bootom_n_avigation_cubit.dart';
 
-abstract class PageViewBootomNavigationState extends Equatable {}
-
-class PageViewIndex extends PageViewBootomNavigationState {
+class PageViewIndex extends Equatable {
   final int index;
-
-  PageViewIndex({
+  const PageViewIndex({
     required this.index,
   });
 

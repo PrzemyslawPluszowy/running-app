@@ -141,19 +141,24 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   }
 
   @override
-  Future<void> logIn(String email, String password) async {
+  Future<String> logIn(String email, String password) async {
+    String res = '';
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      res = 'success';
     } on FirebaseAuthException catch (e) {
       {
+        res = e.code;
         Fluttertoast.showToast(msg: e.code);
       }
     } catch (e) {
       {
+        res = e.toString();
         Fluttertoast.showToast(msg: e.toString());
       }
     }
+    return res;
   }
 
   @override
@@ -302,5 +307,21 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
     }
+  }
+
+  @override
+  Future<String> forgotPassword(String email) async {
+    String res = '';
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      res = 'success';
+    } on FirebaseException catch (e) {
+      // Fluttertoast.showToast(msg: e.code);
+      res = e.code;
+    } catch (e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      res = e.toString();
+    }
+    return res;
   }
 }

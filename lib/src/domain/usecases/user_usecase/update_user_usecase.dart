@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
 
 import '../../repositories/firebase_repository.dart';

@@ -22,7 +22,7 @@ class AvatarImage extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(90),
               child: Container(
-                color: Color.fromARGB(125, 152, 7, 255),
+                color: const Color.fromARGB(125, 152, 7, 255),
               ),
             )),
         SizedBox(

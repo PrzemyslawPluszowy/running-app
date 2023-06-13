@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:new_app/src/domain/entities/calcuate_entity.dart';
-import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
-
 import '../../repositories/firebase_repository.dart';
 
 class GetListVdotsUsecase {

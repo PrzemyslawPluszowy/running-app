@@ -38,3 +38,18 @@ class IsLogOutState extends AuthCubitState {
   @override
   List<Object?> get props => [];
 }
+
+class AuthCubitForgotPass extends AuthCubitState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthCubitErrForgetPass extends AuthCubitState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SendEmailSuccess extends AuthCubitState {
+  @override
+  List<Object?> get props => [];
+}

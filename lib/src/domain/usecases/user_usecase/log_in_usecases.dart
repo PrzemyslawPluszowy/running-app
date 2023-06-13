@@ -4,7 +4,7 @@ class LogInUserUsecase {
   final FirebaseRepository fireRepository;
 
   LogInUserUsecase({required this.fireRepository});
-  Future<void> call(String email, String password) {
+  Future<String> call(String email, String password) {
     return fireRepository.logIn(email, password);
   }
 }

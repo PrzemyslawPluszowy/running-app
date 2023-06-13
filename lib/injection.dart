@@ -21,8 +21,8 @@ import 'package:new_app/src/domain/usecases/user_stats_andlist/get_llist_vdots.d
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_user_race_list.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_vdot_traning_pace.dart';
+import 'package:new_app/src/domain/usecases/user_usecase/forgot_password_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user.dart';
-import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user_uid.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/is_log_in_usecases.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/delete_single_user_calculated.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_all_users_calc_list_usecase.dart';
@@ -49,6 +49,7 @@ Future<void> init() async {
         logInUserUsecase: getIt.call(),
         isLogInUsecase: getIt.call(),
         logOutUserUsecase: getIt.call(),
+        forgotPasswordUseCase: getIt.call(),
       ));
 
   getIt.registerFactory(() => UserCubit(getCurretUserUsecase: getIt.call()));
@@ -75,6 +76,9 @@ Future<void> init() async {
   getIt.registerFactory(() => SettingCubit(updateUserUseCase: getIt.call()));
 
   //register usecases
+  getIt.registerLazySingleton(() => ForgotPasswordUseCase(
+        firebaseRepository: getIt.call(),
+      ));
   getIt.registerLazySingleton(
       () => UpdateUserUseCase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(() => EstimatedRaceTimeUseCase());
@@ -109,8 +113,7 @@ Future<void> init() async {
       () => LogOutUserUsecase(fireRepository: getIt.call()));
   getIt.registerLazySingleton(
       () => LogInUserUsecase(fireRepository: getIt.call()));
-  // getIt.registerLazySingleton(
-  //     () => GetCurretUserUidUsecase(firebaseRepository: getIt.call()));
+
   getIt.registerLazySingleton(
       () => GetCurretUserUsecase(firebaseRepository: getIt.call()));
   //register impl

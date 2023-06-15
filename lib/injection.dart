@@ -73,11 +73,13 @@ Future<void> init() async {
       getVdtotTrainingPaceUsecase: getIt.call(),
       getCurrentCalcListOneUsecase: getIt.call(),
       getHrZoneUseCase: getIt.call(),
-      estimatedRaceTimeUseCase: getIt.call()));
+      estimatedRaceTimeUseCase: getIt.call(),
+      getListVdotsUsecase: getIt.call()));
 
   getIt.registerFactory(() => SettingCubit(updateUserUseCase: getIt.call()));
 
   //register usecases
+
   getIt.registerLazySingleton(
       () => RefreshNextPageUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(

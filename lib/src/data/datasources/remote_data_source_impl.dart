@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -102,8 +101,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<void> registerUserAddFields(UserEntity user, String uid) async {
     String? imageUrl = await uploadAndGetUrlImage(user.imagefile!);
-    num bmi =
-        user.weight! / ((user.height! / 100) * (user.height! / 100)).round();
+    int bmi =
+        (user.weight! ~/ ((user.height! / 100) * (user.height! / 100))).toInt();
     final newUser = UserModel(
         urlImageAvatar: imageUrl,
         calc: const [],

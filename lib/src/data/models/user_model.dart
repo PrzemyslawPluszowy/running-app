@@ -11,7 +11,7 @@ class UserModel extends UserEntity {
   final int? height;
   final int? hrMax;
   final int? hrRest;
-  final num? bmi;
+  final int? bmi;
   final num? vdot;
   final List? calc;
 

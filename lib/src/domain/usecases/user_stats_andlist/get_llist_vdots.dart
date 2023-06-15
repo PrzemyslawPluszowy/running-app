@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../entities/calcuate_entity.dart';
 import '../../repositories/firebase_repository.dart';
 
 class GetListVdotsUsecase {
@@ -7,13 +8,16 @@ class GetListVdotsUsecase {
   GetListVdotsUsecase({
     required this.firebaseRepository,
   });
-  Stream<List<int>> call() async* {}
-
-  // Stream<List<int>> convertStream(Stream<List<CalcluateEntity>> stream) async* {
-  //   await for (var list in stream) {
-  //     for (var entity in list) {
-  //       yield entity.vdot!;
-  //     }
-  //   }
-  // }
+  Stream<List<int>> call() async* {
+    Stream<List<CalcluateEntity>> stream = firebaseRepository.getUserRaceList();
+    await for (final data in stream) {
+      List<int> streamOutput = [];
+      for (final item in data) {
+        if (item.vdot != null) {
+          streamOutput.add(item.vdot!);
+        }
+      }
+      yield streamOutput;
+    }
+  }
 }

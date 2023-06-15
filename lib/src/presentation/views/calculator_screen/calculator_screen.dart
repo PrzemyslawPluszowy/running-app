@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:new_app/src/domain/entities/calcuate_entity.dart';
 import 'package:new_app/src/domain/entities/user_entity.dart';
+import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
 import 'package:new_app/src/presentation/cubits/calculator/calculator_cubit.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/widgets/distance_field_picker.dart';
 import 'package:new_app/src/presentation/views/calculator_screen/widgets/pace_time_field_picker.dart';
@@ -45,6 +46,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           }
           if (state is RaceSaved) {
             Fluttertoast.showToast(msg: 'Race is saved');
+            context.read<AllUsersListCubit>().refresh();
           }
           if (state is SaveRaceErr) {
             Fluttertoast.showToast(msg: 'Something went wrong');

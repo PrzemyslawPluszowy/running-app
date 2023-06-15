@@ -77,7 +77,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.9,
           child: Column(
             children: [
@@ -118,28 +118,47 @@ class _SettingScreenState extends State<SettingScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
                     height: 350,
-                    child: GestureDetector(
-                      onTap: () => choseImagePicker(context),
-                      child: _imageAvatar == null
-                          ? Container(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              height: MediaQuery.of(context).size.height * 0.3,
-                              width: double.infinity,
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ))
-                          : Container(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              height: MediaQuery.of(context).size.height * 0.3,
-                              width: double.infinity,
-                              child: AvatarImage(
-                                colorScheme: colorScheme,
-                                image: _imageAvatar!,
-                              )),
+                    child: BlocBuilder<SettingCubit, SettingState>(
+                      builder: (context, state) {
+                        return GestureDetector(
+                          onTap: () => choseImagePicker(context),
+                          child: _imageAvatar == null
+                              ? Container(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  width: double.infinity,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ))
+                              : Container(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  width: double.infinity,
+                                  child: state is SettingLoadingState
+                                      ? Container(
+                                          alignment: Alignment.center,
+                                          width: 100,
+                                          height: 100,
+                                          child: Center(
+                                              child: Transform.scale(
+                                            scale: 3,
+                                            child:
+                                                const CircularProgressIndicator(
+                                              strokeWidth: 10,
+                                            ),
+                                          )))
+                                      : AvatarImage(
+                                          colorScheme: colorScheme,
+                                          image: _imageAvatar!,
+                                        )),
+                        );
+                      },
                     ),
                   ),
                   SizedBox(
@@ -287,7 +306,7 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void submitFieldButton() async {
-    num? bmi;
+    int? bmi;
     if (_weight != null && _height != null) {
       bmi = (_weight! / ((_height! / 100) * (_height! / 100))).round();
     } else if (_weight != null) {

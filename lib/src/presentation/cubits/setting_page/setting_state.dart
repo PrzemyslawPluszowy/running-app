@@ -12,3 +12,5 @@ class SettingInitial extends SettingState {}
 class SettingLoadingState extends SettingState {}
 
 class SettingLoadedState extends SettingState {}
+
+class SettingSended extends SettingState {}

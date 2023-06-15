@@ -13,7 +13,7 @@ class UserEntity extends Equatable {
   final int? height;
   final int? hrMax;
   final int? hrRest;
-  final num? bmi;
+  final int? bmi;
   final num? vdot;
   final List? calc;
   final File? imagefile;

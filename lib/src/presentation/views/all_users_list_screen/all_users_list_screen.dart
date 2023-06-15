@@ -18,7 +18,7 @@ class AllUserCalculatedListScreen extends StatefulWidget {
 
 class _AllUserCalculatedListScreenState
     extends State<AllUserCalculatedListScreen> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -108,14 +108,6 @@ class _AllUserCalculatedListScreenState
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      context
-                                          .read<AllUsersListCubit>()
-                                          .fetchNextPage();
-                                    },
-                                    child: Text('fetchNextPage'),
-                                  ),
                                   const SizedBox(
                                     width: 90,
                                   ),

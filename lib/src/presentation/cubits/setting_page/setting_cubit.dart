@@ -17,6 +17,11 @@ class SettingCubit extends Cubit<SettingState> {
       emit(SettingLoadingState());
       await updateUserUseCase.call(updateUserData);
       emit(SettingLoadedState());
+      Fluttertoast.showToast(
+          msg: "Update Success",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          fontSize: 16.0);
     } catch (e) {
       Fluttertoast.showToast(
           msg: "Error: $e",

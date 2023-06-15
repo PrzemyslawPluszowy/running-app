@@ -42,7 +42,6 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   void settingDistance({
     required double meters,
   }) {
-    print(meters);
     distanceInMeter = meters;
     pace = calculatePaceUseCase.call(timeRace, distanceInMeter);
     emit(CalculatorController(
@@ -75,6 +74,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
       Future.delayed(const Duration(seconds: 5));
 
       await saveCalculatedRaceUsecase.call(raceCalc);
+
       emit(RaceSaved());
     } catch (e) {
       emit(SaveRaceErr());

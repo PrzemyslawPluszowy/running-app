@@ -51,9 +51,14 @@ class AuthCubit extends Cubit<AuthCubitState> {
 
     try {
       String res = await logInUserUsecase.call(email, password);
+      print(res);
       if (res == 'wrong-password') {
         emit(AuthCubitForgotPass());
       } else {
+        emit(AuthCubiLoaded());
+        Fluttertoast.showToast(msg: res);
+      }
+      if (res == 'success') {
         emit(IsLogInState());
       }
     } catch (e) {

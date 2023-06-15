@@ -25,6 +25,16 @@ class UserStatsScreen extends StatelessWidget {
         if (state is UserStatsInitial) {
           return const Center(child: CircularProgressIndicator());
         }
+        if (state is UserStatsError) {
+          return const Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Plese calculate your vdot first"),
+              Icon(Icons.watch_rounded, size: 100),
+            ],
+          ));
+        }
         if (state is UserStatsLoaded) {
           List<VdotList> points = [
             VdotList(index: 0, vdot: 31),

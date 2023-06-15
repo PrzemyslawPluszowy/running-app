@@ -15,9 +15,10 @@ abstract class FirebaseRepository {
   Future<void> saveCalculatedRace(CalcluateEntity calc);
   Stream<List<CalcluateEntity>> getUserRaceList();
   Future<void> deleteUserSingleCalculation(String postId);
-  getAllUsersCalcList();
+  // getAllUsersCalcList();
   Future<List<CalcluateEntity>> fetchNextPage();
   Future<List<CalcluateEntity>> getCurrentUserCalcList();
   Future<void> updateUserFields(UserEntity user);
   Future<String> forgotPassword(String email);
+  void refreshNextPage();
 }

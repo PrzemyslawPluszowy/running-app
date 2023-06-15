@@ -9,6 +9,8 @@ abstract class UserStatsState extends Equatable {
 
 class UserStatsInitial extends UserStatsState {}
 
+class UserStatsError extends UserStatsState {}
+
 class UserStatsLoaded extends UserStatsState {
   final int age;
   final int weight;

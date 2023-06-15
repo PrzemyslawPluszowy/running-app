@@ -42,8 +42,8 @@ class _MainScreenState extends State<MainScreen> {
   void changePage(int index) {
     _pageController.animateToPage(
       index,
-      curve: Curves.easeIn,
-      duration: const Duration(milliseconds: 200),
+      curve: Curves.linear,
+      duration: const Duration(milliseconds: 300),
     );
   }
 

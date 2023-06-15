@@ -22,11 +22,11 @@ import 'package:new_app/src/domain/usecases/user_stats_andlist/get_llist_vdots.d
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_user_race_list.dart';
 import 'package:new_app/src/domain/usecases/calculator_usecase/get_vdot_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/get_vdot_traning_pace.dart';
+import 'package:new_app/src/domain/usecases/user_stats_andlist/refresh_next_page.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/forgot_password_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/get_curret_user.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/is_log_in_usecases.dart';
 import 'package:new_app/src/domain/usecases/user_stats_andlist/delete_single_user_calculated.dart';
-import 'package:new_app/src/domain/usecases/user_stats_andlist/get_all_users_calc_list_usecase.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/log_in_usecases.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/log_out_usecases.dart';
 import 'package:new_app/src/domain/usecases/user_usecase/register_user_usecase.dart';
@@ -65,8 +65,8 @@ Future<void> init() async {
       getUserRaceListUsecase: getIt.call(),
       deleteSingleUserCalculatedUseCase: getIt.call()));
   getIt.registerFactory(() => AllUsersListCubit(
-        getAllUsersCalcList: getIt.call(),
         fetchPaginatedUsecase: getIt.call(),
+        refreshNextPageUsecase: getIt.call(),
       ));
   getIt.registerFactory(() => UserStatsCubit(
       getCurretUserUsecase: getIt.call(),
@@ -78,6 +78,8 @@ Future<void> init() async {
   getIt.registerFactory(() => SettingCubit(updateUserUseCase: getIt.call()));
 
   //register usecases
+  getIt.registerLazySingleton(
+      () => RefreshNextPageUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(
       () => FetchPaginatedUsecase(firebaseRepository: getIt.call()));
   getIt.registerLazySingleton(() => ForgotPasswordUseCase(
@@ -97,8 +99,6 @@ Future<void> init() async {
       () => CalculatePaceUseCase(runningCalulator: getIt.call()));
   getIt.registerLazySingleton(
       () => CalculateRaceTimeUseCase(runningCalulator: getIt.call()));
-  getIt.registerLazySingleton(
-      () => GetAllUsersCalcList(remoteDataSource: getIt.call()));
 
   getIt.registerLazySingleton(() =>
       DeleteSingleUserCalculatedUseCase(firebaseRepository: getIt.call()));

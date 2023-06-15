@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/date_symbols.dart';
 import 'package:new_app/src/core/ext/extension.dart';
 import 'package:new_app/src/presentation/cubits/all_users_list/all_users_list_cubit.dart';
 import 'package:new_app/src/presentation/cubits/bootom_navigation/page_view_bootom_n_avigation_cubit.dart';
@@ -19,11 +18,17 @@ class AllUserCalculatedListScreen extends StatefulWidget {
 
 class _AllUserCalculatedListScreenState
     extends State<AllUserCalculatedListScreen> {
-  late ScrollController _scrollController;
-  bool _isLoading = false;
+  ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
-    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        context.read<AllUsersListCubit>().fetchNextPage();
+      }
+    });
+
     super.initState();
   }
 
@@ -31,55 +36,55 @@ class _AllUserCalculatedListScreenState
   Widget build(BuildContext context) {
     return BlocBuilder<AllUsersListCubit, AllUsersListState>(
         builder: (context, state) {
-      _scrollController.addListener(() {
-        if (_scrollController.position.maxScrollExtent ==
-            _scrollController.offset) {
-          context.read<AllUsersListCubit>().fetchNextPage();
-        }
-      });
       if (state is AllUsersListLoading) {
         return const Center(
           child: CircularProgressIndicator(),
         );
       }
-      if (state is AllUsersListState) {
-        if (state.listToshow!.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("You Don't any saved race, please calculate one."),
-                IconButton(
-                    onPressed: () {
-                      context
-                          .read<PageViewBootomNavigationCubit>()
-                          .pageViewIndex(0);
-                    },
-                    icon: const Icon(
-                      Icons.calculate_outlined,
-                      size: 100,
-                    )),
-              ],
-            ),
-          );
-        }
-        var listOfcalulated = state.listToshow;
-        return Column(
-          children: [
-            Expanded(
+      if (state.listToshow!.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("You Don't any saved race, please calculate one."),
+              IconButton(
+                  onPressed: () {
+                    context
+                        .read<PageViewBootomNavigationCubit>()
+                        .pageViewIndex(0);
+                  },
+                  icon: const Icon(
+                    Icons.calculate_outlined,
+                    size: 100,
+                  )),
+            ],
+          ),
+        );
+      }
+      var listOfcalulated = state.listToshow;
+      return Column(
+        children: [
+          Expanded(
+            child: RefreshIndicator(
+              triggerMode: RefreshIndicatorTriggerMode.onEdge,
+              onRefresh: () {
+                context.read<AllUsersListCubit>().refresh();
+                return Future.delayed(const Duration(seconds: 1));
+              },
               child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
                 controller: _scrollController,
-                itemCount: listOfcalulated!.length + 1,
+                itemCount: listOfcalulated!.isEmpty
+                    ? listOfcalulated.length
+                    : listOfcalulated.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == listOfcalulated.length &&
-                      state.isLoading &&
-                      !state.isEndOfList) {
+                  if (index == listOfcalulated.length && state.isLoading) {
                     return Center(
                         child: Container(
-                            margin: const EdgeInsets.only(bottom: 50),
+                            margin: EdgeInsets.only(bottom: 50),
                             width: 50,
                             height: 50,
-                            child: const CircularProgressIndicator()));
+                            child: CircularProgressIndicator()));
                   } else if (index == listOfcalulated.length &&
                       !state.isLoading &&
                       !state.isEndOfList) {
@@ -103,6 +108,14 @@ class _AllUserCalculatedListScreenState
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      context
+                                          .read<AllUsersListCubit>()
+                                          .fetchNextPage();
+                                    },
+                                    child: Text('fetchNextPage'),
+                                  ),
                                   const SizedBox(
                                     width: 90,
                                   ),
@@ -182,15 +195,8 @@ class _AllUserCalculatedListScreenState
                 },
               ),
             ),
-          ],
-        );
-      }
-
-      return Center(
-        child: Text(
-          'Something went Wrong',
-          style: TextStyle(color: Theme.of(context).colorScheme.error),
-        ),
+          ),
+        ],
       );
     });
   }

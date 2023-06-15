@@ -28,9 +28,8 @@ extension Scale on double {
       required double inputScaleMax,
       required double input}) {
     return (((targetScaleMax - targetScaleMin) *
-                ((input - inputScaleMin) / (inputScaleMax - inputScaleMin))) +
-            targetScaleMin) ??
-        0;
+            ((input - inputScaleMin) / (inputScaleMax - inputScaleMin))) +
+        targetScaleMin);
   }
 }
 

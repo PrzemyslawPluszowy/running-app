@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -101,14 +102,14 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<void> registerUserAddFields(UserEntity user, String uid) async {
     String? imageUrl = await uploadAndGetUrlImage(user.imagefile!);
-
+    num bmi =
+        user.weight! / ((user.height! / 100) * (user.height! / 100)).round();
     final newUser = UserModel(
         urlImageAvatar: imageUrl,
         calc: const [],
         uid: uid,
         age: user.age,
-        bmi: StaticDataImpl()
-            .calculateBmi(weight: user.weight!, height: user.height!),
+        bmi: bmi,
         email: user.email,
         weight: user.weight,
         userName: user.userName,
@@ -212,54 +213,50 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     }
   }
 
-  late DocumentSnapshot lastDocument;
-  bool firstFetch = true;
+  DocumentSnapshot? lastDocument;
+  bool isMoreDate = true;
+
   @override
-  Stream<List<CalcluateEntity>> getAllUserList() async* {
-    final first = firebaseFirestore
-        .collection('calculatedRace')
-        .orderBy(
-          'dateCreated',
-          descending: true,
-        )
-        .limit(6);
-
-    await first.get().then((value) => lastDocument = value.docs.last);
-
-    final list =
-        first.startAfterDocument(lastDocument).snapshots().map((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        lastDocument = snapshot.docs.last;
-      }
-
-      return snapshot.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList();
-    });
-    yield* list;
+  void refreshNextPage() {
+    isMoreDate = true;
+    lastDocument = null;
   }
 
   @override
   Future<List<CalcluateEntity>> fetchNextPage() async {
-    if (firstFetch) {
-      final snapshot = await firebaseFirestore
-          .collection('calculatedRace')
-          .orderBy('dateCreated', descending: true)
-          .limit(6)
-          .get();
+    if (isMoreDate) {
+      late QuerySnapshot querySnapshot;
 
-      lastDocument = snapshot.docs.last;
-      firstFetch = false;
+      if (lastDocument == null) {
+        querySnapshot = await firebaseFirestore
+            .collection('calculatedRace')
+            .orderBy('dateCreated', descending: true)
+            .orderBy(
+              'id',
+            )
+            .limit(7)
+            .get();
+      } else {
+        querySnapshot = await firebaseFirestore
+            .collection('calculatedRace')
+            .orderBy('dateCreated', descending: true)
+            .orderBy(
+              'id',
+            )
+            .startAfterDocument(lastDocument!)
+            .limit(7)
+            .get();
+      }
+      lastDocument = querySnapshot.docs.last;
+      if (querySnapshot.docs.length < 7) {
+        isMoreDate = false;
+      }
+      return querySnapshot.docs
+          .map((e) => CalcluateModel.fromSnapshot(e))
+          .toList();
+    } else {
+      return [];
     }
-    final snapshot = await firebaseFirestore
-        .collection('calculatedRace')
-        .orderBy('dateCreated', descending: true)
-        .startAfterDocument(lastDocument)
-        .limit(6)
-        .get();
-
-    if (snapshot.docs.isNotEmpty) {
-      lastDocument = snapshot.docs.last;
-    }
-    return snapshot.docs.map((e) => CalcluateModel.fromSnapshot(e)).toList();
   }
 
   @override

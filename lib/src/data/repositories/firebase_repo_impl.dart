@@ -59,11 +59,6 @@ class FirebaseRepoImpl implements FirebaseRepository {
   }
 
   @override
-  Stream<List<CalcluateEntity>> getAllUsersCalcList() {
-    return remoteDataSource.getAllUserList();
-  }
-
-  @override
   Future<List<CalcluateEntity>> getCurrentUserCalcList() {
     return remoteDataSource.getCurrentUserCalcList();
   }
@@ -81,5 +76,10 @@ class FirebaseRepoImpl implements FirebaseRepository {
   @override
   Future<List<CalcluateEntity>> fetchNextPage() {
     return remoteDataSource.fetchNextPage();
+  }
+
+  @override
+  void refreshNextPage() {
+    return remoteDataSource.refreshNextPage();
   }
 }

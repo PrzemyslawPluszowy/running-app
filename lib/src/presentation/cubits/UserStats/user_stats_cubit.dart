@@ -72,6 +72,10 @@ class UserStatsCubit extends Cubit<UserStatsState> {
       emit(UserStatsInitial());
       double avgVdot = await getCurrentCalcListOneUsecase.call();
       UserEntity user = event.first;
+      if (user.vdot == null) {
+        emit(UserStatsError());
+        return;
+      }
       EsitamtedRaceTime raceTime =
           estimatedRaceTimeUseCase.call(vdot: user.vdot!.toInt());
 

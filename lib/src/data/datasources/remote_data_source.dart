@@ -19,9 +19,9 @@ abstract class RemoteDataSource {
   Future<void> saveCalculatedRace(CalcluateEntity calc);
   Stream<List<CalcluateEntity>> getUserRaceList();
   Future<void> deleteUserSingleCalculation(String postId);
-  Stream<List<CalcluateEntity>> getAllUserList();
   Future<List<CalcluateEntity>> getCurrentUserCalcList();
   Future<void> updateUserFields(UserEntity user);
   Future<String> forgotPassword(String email);
   Future<List<CalcluateEntity>> fetchNextPage();
+  void refreshNextPage();
 }

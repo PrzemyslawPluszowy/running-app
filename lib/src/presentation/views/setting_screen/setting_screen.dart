@@ -76,207 +76,211 @@ class _SettingScreenState extends State<SettingScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CustomTextField(
-                        colorScheme: colorScheme,
-                        controller: _nameController,
-                        hintText: 'Change your name',
-                        label: 'Name',
-                        iconData: Icons.person),
+      child: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomTextField(
+                          colorScheme: colorScheme,
+                          controller: _nameController,
+                          hintText: 'Change your name',
+                          label: 'Name',
+                          iconData: Icons.person),
+                    ),
                   ),
-                ),
-                Flexible(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: colorScheme.primary,
-                        borderRadius: BorderRadius.circular(10)),
-                    height: 60,
-                    width: 60,
-                    child: IconButton(
-                        onPressed: () {
-                          context.read<AuthCubit>().logout();
-                        },
-                        icon: const Icon(Icons.logout,
-                            color: Color(0xffF2F2F2), size: 30)),
+                  Flexible(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: colorScheme.primary,
+                          borderRadius: BorderRadius.circular(10)),
+                      height: 60,
+                      width: 60,
+                      child: IconButton(
+                          onPressed: () {
+                            context.read<AuthCubit>().logout();
+                          },
+                          icon: const Icon(Icons.logout,
+                              color: Color(0xffF2F2F2), size: 30)),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: 350,
+                    child: GestureDetector(
+                      onTap: () => choseImagePicker(context),
+                      child: _imageAvatar == null
+                          ? Container(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: double.infinity,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ))
+                          : Container(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: double.infinity,
+                              child: AvatarImage(
+                                colorScheme: colorScheme,
+                                image: _imageAvatar!,
+                              )),
+                    ),
                   ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: 400,
-                  child: GestureDetector(
-                    onTap: () => choseImagePicker(context),
-                    child: _imageAvatar == null
-                        ? Container(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            width: double.infinity,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ))
-                        : Container(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            width: double.infinity,
-                            child: AvatarImage(
-                              colorScheme: colorScheme,
-                              image: _imageAvatar!,
-                            )),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: 300,
-                  child: Column(
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: CustomTextField(
-                              press: () {
-                                _dialogPickerBulider(
-                                    typeField: PICKER.age,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    height: 300,
+                    child: Column(
+                      children: [
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: CustomTextField(
+                                press: () {
+                                  _dialogPickerBulider(
+                                      typeField: PICKER.age,
+                                      context: context,
+                                      list: _ageList,
+                                      title: 'Pick your age',
+                                      controller: _ageController,
+                                      startValue: 13,
+                                      unit: '');
+                                },
+                                readOnly: true,
+                                colorScheme: colorScheme,
+                                controller: _ageController,
+                                label: 'Age',
+                                iconData: Icons.date_range),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: CustomTextField(
+                                press: () {
+                                  _dialogPickerBulider(
+                                      typeField: PICKER.height,
+                                      context: context,
+                                      list: _heightList,
+                                      title: 'Pick your height',
+                                      controller: _heightController,
+                                      startValue: 120,
+                                      unit: 'cm');
+                                },
+                                readOnly: true,
+                                colorScheme: colorScheme,
+                                controller: _heightController,
+                                hintText: '',
+                                label: 'Height',
+                                iconData: Icons.height),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: CustomTextField(
+                                press: () {
+                                  _dialogPickerBulider(
+                                      typeField: PICKER.weight,
+                                      context: context,
+                                      list: _weightList,
+                                      title: 'Pick your weight',
+                                      controller: _weightController,
+                                      startValue: 40,
+                                      unit: 'kg');
+                                },
+                                readOnly: true,
+                                colorScheme: colorScheme,
+                                controller: _weightController,
+                                hintText: '',
+                                label: 'Weight',
+                                iconData: Icons.scale),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: CustomTextField(
+                                press: () {
+                                  _dialogPickerBulider(
+                                    typeField: PICKER.hrrest,
                                     context: context,
-                                    list: _ageList,
-                                    title: 'Pick your age',
-                                    controller: _ageController,
-                                    startValue: 13,
-                                    unit: '');
-                              },
-                              readOnly: true,
-                              colorScheme: colorScheme,
-                              controller: _ageController,
-                              label: 'Age',
-                              iconData: Icons.date_range),
+                                    list: _hrRestList,
+                                    title: 'set HR Rest',
+                                    controller: _hrRestController,
+                                    startValue: 30,
+                                    unit: 'bpm',
+                                  );
+                                },
+                                readOnly: true,
+                                colorScheme: colorScheme,
+                                controller: _hrRestController,
+                                hintText: '',
+                                label: 'HR Rest',
+                                iconData: Icons.monitor_heart_outlined),
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: CustomTextField(
-                              press: () {
-                                _dialogPickerBulider(
-                                    typeField: PICKER.height,
-                                    context: context,
-                                    list: _heightList,
-                                    title: 'Pick your height',
-                                    controller: _heightController,
-                                    startValue: 120,
-                                    unit: 'cm');
-                              },
-                              readOnly: true,
-                              colorScheme: colorScheme,
-                              controller: _heightController,
-                              hintText: '',
-                              label: 'Height',
-                              iconData: Icons.height),
+                        const SizedBox(
+                          height: 5,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: CustomTextField(
-                              press: () {
-                                _dialogPickerBulider(
-                                    typeField: PICKER.weight,
-                                    context: context,
-                                    list: _weightList,
-                                    title: 'Pick your weight',
-                                    controller: _weightController,
-                                    startValue: 40,
-                                    unit: 'kg');
-                              },
-                              readOnly: true,
-                              colorScheme: colorScheme,
-                              controller: _weightController,
-                              hintText: '',
-                              label: 'Weight',
-                              iconData: Icons.scale),
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: CustomTextField(
+                                press: () {
+                                  _dialogPickerBulider(
+                                      typeField: PICKER.hrmax,
+                                      context: context,
+                                      list: _hrRMaxList,
+                                      title: 'set HR Max',
+                                      controller: _hrMaxController,
+                                      startValue: 100,
+                                      unit: 'bpm');
+                                },
+                                readOnly: true,
+                                colorScheme: colorScheme,
+                                controller: _hrMaxController,
+                                hintText: '',
+                                label: 'HR Max',
+                                iconData: Icons.monitor_heart),
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: CustomTextField(
-                              press: () {
-                                _dialogPickerBulider(
-                                  typeField: PICKER.hrrest,
-                                  context: context,
-                                  list: _hrRestList,
-                                  title: 'set HR Rest',
-                                  controller: _hrRestController,
-                                  startValue: 30,
-                                  unit: 'bpm',
-                                );
-                              },
-                              readOnly: true,
-                              colorScheme: colorScheme,
-                              controller: _hrRestController,
-                              hintText: '',
-                              label: 'HR Rest',
-                              iconData: Icons.monitor_heart_outlined),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: CustomTextField(
-                              press: () {
-                                _dialogPickerBulider(
-                                    typeField: PICKER.hrmax,
-                                    context: context,
-                                    list: _hrRMaxList,
-                                    title: 'set HR Max',
-                                    controller: _hrMaxController,
-                                    startValue: 100,
-                                    unit: 'bpm');
-                              },
-                              readOnly: true,
-                              colorScheme: colorScheme,
-                              controller: _hrMaxController,
-                              hintText: '',
-                              label: 'HR Max',
-                              iconData: Icons.monitor_heart),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            OutlinedButton(
-                onPressed: () {
-                  submitFieldButton();
-                },
-                child: const Text('Save new value'))
-          ],
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              OutlinedButton(
+                  onPressed: () {
+                    submitFieldButton();
+                  },
+                  child: const Text('Save new value'))
+            ],
+          ),
         ),
       ),
     );

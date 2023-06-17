@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,8 +36,9 @@ class UserStatsScreen extends StatelessWidget {
           ));
         }
         if (state is UserStatsLoaded) {
-          List<VdotList> points = List.generate(state.vdotList.length,
-              (index) => VdotList(index: index, vdot: state.vdotList[index]));
+          final list = (state.vdotList).reversed.toList();
+          List<VdotList> points = List.generate(list.length,
+              (index) => VdotList(index: index, vdot: list[index]));
 
           return SingleChildScrollView(
             child: Padding(

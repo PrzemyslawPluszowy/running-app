@@ -28,7 +28,6 @@ class UserStatsCubit extends Cubit<UserStatsState> {
   final GetListVdotsUsecase getListVdotsUsecase;
 
   showUserStats() async {
-    List<int> vdotsList = [];
     emit(const UserStatsInitial());
     getCurretUserUsecase.call().listen((users) async {
       UserEntity user = users.first;
@@ -85,74 +84,3 @@ class UserStatsCubit extends Cubit<UserStatsState> {
     });
   }
 }
-//     List<int> vdotsList = [];
-//     emit(const UserStatsInitial());
-//     getListVdotsUsecase.call().listen((event) {
-//       vdotsList = event;
-    
-//     getCurretUserUsecase.firebaseRepository
-//         .getCurretUser()
-//         .listen((event) async {
-//       emit(UserStatsInitial());
-      // double avgVdot = await getCurrentCalcListOneUsecase.call();
-      // UserEntity user = event.first;
-      // if (user.vdot == null) {
-      //   emit(UserStatsError());
-      //   return;
-      // }
-      // EsitamtedRaceTime raceTime =
-      //     estimatedRaceTimeUseCase.call(vdot: user.vdot!.toInt());
-
-      // HrZone hrZone =
-      //     getHrZoneUseCase.call(hrMax: user.hrMax!, hrMin: user.hrRest!);
-      // VdotTraningPaceEntity traningPace =
-      //     getVdtotTrainingPaceUsecase.call(vdot: user.vdot!.toInt());
-//       generateStatsToShow(user, traningPace, hrZone, raceTime);
-
-//       emit(UserStatsLoaded(
-//           age: age,
-//           weight: weight,
-//           height: height,
-//           hrMax: hrMax,
-//           hrRest: hrRest,
-//           bmi: bmi,
-//           vdot: vdot,
-//           name: name,
-//           avgVdot: double.parse(avgVdot.toStringAsFixed(2)),
-//           //user pace traning
-//           distance: distance,
-//           easyPace: easyPace,
-//           thresholdPace: thresholdPace,
-//           intervalPace: intervalPace,
-//           repetitionPace: repetitionPace,
-//           marathonPace: marathonPace,
-//           //hr zone
-//           easyZoneMin: easyZoneMin,
-//           easyZoneMax: easyZoneMax,
-//           marathonZoneMin: marathonZoneMin,
-//           marathonZoneMax: marathonZoneMax,
-//           thresholdZoneMin: thresholdZoneMin,
-//           thresholdZoneMax: thresholdZoneMax,
-//           intervalZoneMin: intervalZoneMin,
-//           intervalZoneMax: intervalZoneMax,
-//           repetitionZoneMin: repetitionZoneMin,
-//           repetitionZoneMax: repetitionZoneMax,
-//           //estimated race time
-//           marathonTime: marathonTime,
-//           halfMarathonTime: halfMarathonTime,
-//           tenKmTime: tenKmTime,
-//           fiveKmTime: fiveKmTime,
-//           m3200: m3200,
-//           m1600: m1600,
-//           m1500: m1500,
-//           m15km: m15km));
-//     }).onError((err) {
-//       Fluttertoast.showToast(msg: err.toString());
-//     });
-//   }
-
-//   generateStatsToShow(UserEntity user, VdotTraningPaceEntity traningPace,
-//       HrZone hrZone, EsitamtedRaceTime raceTime) {
-
-//   }
-// }
